@@ -21,15 +21,15 @@ public class PlayerManager : NetworkBehaviour
 
     private void Update()
     {        
-        //if (isLocalPlayer)
-        //{
+       if (isLocalPlayer)
+       {
             Vector3 dirtVelocity = _input.GetInput();
             Vector3 velocity = Vector3.zero;
             velocity.x = dirtVelocity.x;
             velocity.z = dirtVelocity.y;
 
             _move.Move(_input.GetInput());
-       //}
+       }
 
     }
 }
