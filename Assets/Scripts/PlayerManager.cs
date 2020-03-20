@@ -33,37 +33,36 @@ public class PlayerManager : NetworkBehaviour
 
         _cameraT = _playerCameraPrefab.transform;
 #else
-          _cameraT = Camera.main.transform;
+        _cameraT = Camera.main.transform;
 #endif
     }
 
+    [Client]
     private void Update()
     {
-        if (isLocalPlayer)
-        {
-            Vector3 dirtVelocity = _input.GetInput();
-            Vector3 velocity = Vector3.zero;
-            velocity.x = dirtVelocity.x;
-            velocity.z = dirtVelocity.y;
+        if (!hasAuthority) return;
 
-            // camera forward and right vectors:
-            Vector3 forward = _cameraT.forward;
-            Vector3 right = _cameraT.right;
+        Vector3 dirtVelocity = _input.GetInput();
+        Vector3 velocity = Vector3.zero;
+        velocity.x = dirtVelocity.x;
+        velocity.z = dirtVelocity.y;
 
-            //project forward and right vectors on the horizontal plane (y = 0)
-            forward.y = 0f;
-            right.y = 0f;
-            forward.Normalize();
-            right.Normalize();
+        // camera forward and right vectors:
+        Vector3 forward = _cameraT.forward;
+        Vector3 right = _cameraT.right;
 
-            //this is the direction in the world space we want to move:
-            velocity = forward * velocity.z + right * velocity.x;
+        //project forward and right vectors on the horizontal plane (y = 0)
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
 
-            // velocity magnitude not more than 1
-            velocity = Vector3.ClampMagnitude(velocity, 1);
+        //this is the direction in the world space we want to move:
+        velocity = forward * velocity.z + right * velocity.x;
 
-            _move.Move(velocity);
-        }
+        // velocity magnitude not more than 1
+        velocity = Vector3.ClampMagnitude(velocity, 1);
 
+        _move.Move(velocity);
     }
 }
