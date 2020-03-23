@@ -2,7 +2,7 @@
 using Mirror;
 using UnityEngine;
 
-public class PlayerManager : NetworkBehaviour
+public class PlayerControllerManager : NetworkBehaviour
 {
 #if INSTALL_CAMERA
     [SerializeField] GameObject _playerCameraPrefab;
@@ -15,12 +15,19 @@ public class PlayerManager : NetworkBehaviour
     private void Start()
     {
         Initialize();
+
+        //    InvokeRepeating("Jump", 1, 3);
     }
+
+
 
     private void Initialize()
     {
         _input = GetComponent<IInput>();
         _move = GetComponent<IMove>();
+
+        //Material material = GetComponent<Material>();
+        //material.color = _colors[Random.Range(0, _colors.Length)];
 
 #if INSTALL_CAMERA
         if (!_playerCameraPrefab)
@@ -37,15 +44,24 @@ public class PlayerManager : NetworkBehaviour
 #endif
     }
 
-    [Client]
+
     private void Update()
     {
-        if (!hasAuthority) return;
+        // movement for local player
+        if (!isLocalPlayer)
+            return;
 
-        Vector3 dirtVelocity = _input.GetInput();
+        Vector3 velocity = VelocityFromInput(_input.GetInput());
+
+        _move.Move(velocity);
+
+    }
+
+    private Vector3 VelocityFromInput(Vector3 input)
+    {
         Vector3 velocity = Vector3.zero;
-        velocity.x = dirtVelocity.x;
-        velocity.z = dirtVelocity.y;
+        velocity.x = input.x;
+        velocity.z = input.y;
 
         // camera forward and right vectors:
         Vector3 forward = _cameraT.forward;
@@ -62,7 +78,6 @@ public class PlayerManager : NetworkBehaviour
 
         // velocity magnitude not more than 1
         velocity = Vector3.ClampMagnitude(velocity, 1);
-
-        _move.Move(velocity);
+        return velocity;
     }
 }
