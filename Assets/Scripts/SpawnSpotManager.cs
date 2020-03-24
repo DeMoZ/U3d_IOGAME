@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Contains list of spawn spots on the scene
+/// Contains list of spawn spots on the scene.
+/// Currently does nothing for game logic
 /// </summary>
 public class SpawnSpotManager : NetworkBehaviour
 {
@@ -19,8 +20,7 @@ public class SpawnSpotManager : NetworkBehaviour
         SpawnSpot[] spawnSpots = FindObjectsOfType<SpawnSpot>();        
         _spawnPoints.AddRange(spawnSpots);
 
-        foreach(var point in _spawnPoints)
-            NetworkManager.RegisterStartPosition(point.GetTransform);
+       
     }
 
     /// <summary>

@@ -39,6 +39,7 @@ public class SpawnSpot : MonoBehaviour
     {
         Debug.Log("Should be registered");
         NetworkManager.RegisterStartPosition(transform);
+        Debug.Log($"Start positions amount {NetworkManager.startPositions.Count}");
     }
 
     public void OnDestroy()

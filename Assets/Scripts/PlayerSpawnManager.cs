@@ -11,6 +11,7 @@ public class PlayerSpawnManager : NetworkBehaviour
     {
         base.OnStartClient();
 
+        Debug.Log(" Looking for playersPanel");
         // Make this a child of the layout panel in the Canvas
         transform.SetParent(GameObject.Find("PlayersPanel").transform);
     }

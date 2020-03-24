@@ -1,8 +1,10 @@
 ﻿//#define INSTALL_CAMERA
 using Mirror;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class PlayerControllerManager : NetworkBehaviour
+[RequireComponent(typeof(NavMeshAgent))]
+public class PlayerController : NetworkBehaviour
 {
 #if INSTALL_CAMERA
     [SerializeField] GameObject _playerCameraPrefab;
@@ -11,6 +13,8 @@ public class PlayerControllerManager : NetworkBehaviour
 
     IInput _input;
     IMove _move;
+
+    NavMeshAgent _navMeshAgent;
 
     private void Start()
     {
@@ -25,9 +29,7 @@ public class PlayerControllerManager : NetworkBehaviour
     {
         _input = GetComponent<IInput>();
         _move = GetComponent<IMove>();
-
-        //Material material = GetComponent<Material>();
-        //material.color = _colors[Random.Range(0, _colors.Length)];
+        _navMeshAgent = GetComponent<NavMeshAgent>();
 
 #if INSTALL_CAMERA
         if (!_playerCameraPrefab)
