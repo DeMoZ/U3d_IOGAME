@@ -1,11 +1,9 @@
 ﻿//#define INSTALL_CAMERA
 using Mirror;
 using UnityEngine;
-using UnityEngine.AI;
 using TheInput;
 using TheMove;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : NetworkBehaviour
 {
 #if INSTALL_CAMERA
@@ -15,8 +13,6 @@ public class PlayerController : NetworkBehaviour
 
     IInput _input;
     IMove _move;
-
-    NavMeshAgent _navMeshAgent;
 
     private void Start()
     {
@@ -31,7 +27,6 @@ public class PlayerController : NetworkBehaviour
     {
         _input = GetComponent<IInput>();
         _move = GetComponent<IMove>();
-        _navMeshAgent = GetComponent<NavMeshAgent>();
 
 #if INSTALL_CAMERA
         if (!_playerCameraPrefab)
