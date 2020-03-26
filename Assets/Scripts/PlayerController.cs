@@ -2,6 +2,8 @@
 using Mirror;
 using UnityEngine;
 using UnityEngine.AI;
+using TheInput;
+using TheMove;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : NetworkBehaviour
