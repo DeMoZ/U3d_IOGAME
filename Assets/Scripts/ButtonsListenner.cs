@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 [RequireComponent(typeof(Animator))]
-public class AttackStarter : MonoBehaviour
+public class ButtonsListenner : NetworkBehaviour
 {
     private Animator _animator;
     private void Start()
@@ -12,9 +13,10 @@ public class AttackStarter : MonoBehaviour
     }
     void Update()
     {
+        if (!isLocalPlayer) return;
+
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Mouse0");
             _animator.SetTrigger("Attack");
         }
     }
