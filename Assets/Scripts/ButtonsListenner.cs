@@ -5,7 +5,7 @@ using Mirror;
 
 [RequireComponent(typeof(Animator))]
 public class ButtonsListenner : NetworkBehaviour
-{
+{    
     private Animator _animator;
     private void Start()
     {
