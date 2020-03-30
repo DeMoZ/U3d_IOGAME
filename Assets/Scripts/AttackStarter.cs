@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class AttackStarter : MonoBehaviour
 {
-    
-    // Update is called once per frame
+    private Animator _animator;
+    private void Start()
+    {
+        _animator = GetComponent<Animator>();
+    }
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Mouse0");
+            _animator.SetTrigger("Attack");
         }
     }
 }
