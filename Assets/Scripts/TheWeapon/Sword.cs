@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheWeapon {
-    [RequireComponent(typeof(Animator))]
+  //  [RequireComponent(typeof(Animator))]
     public class Sword : MonoBehaviour,IWeapon
     {        
         [SerializeField] private float _attack = 1;
