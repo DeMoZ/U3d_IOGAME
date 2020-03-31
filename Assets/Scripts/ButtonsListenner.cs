@@ -5,7 +5,7 @@ using Mirror;
 
 [RequireComponent(typeof(Animator))]
 public class ButtonsListenner : NetworkBehaviour
-{    
+{
     private Animator _animator;
     private void Start()
     {
@@ -17,7 +17,18 @@ public class ButtonsListenner : NetworkBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            _animator.SetTrigger("Attack");
+            CmdAttack();
         }
+    }
+
+    [Command]
+    void CmdAttack()
+    {
+        RpcAttack();
+    }
+    [ClientRpc]
+    void RpcAttack()
+    {
+        _animator.SetTrigger("Attack");
     }
 }
