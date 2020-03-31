@@ -23,7 +23,6 @@ namespace TheMove
 
         public void Move(Vector3 direction)
         {
-
             _navMeshAgent.velocity = direction;
         }
 
