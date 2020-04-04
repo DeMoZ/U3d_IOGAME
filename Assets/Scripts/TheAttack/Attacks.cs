@@ -11,7 +11,25 @@ namespace TheAttack
     {
         [Tooltip("The unic name for the animation. Can be an animation name")]
         [SerializeField] protected string _idName;
+        
         public string GetIdName => _idName;
+
+        [Tooltip("Weapon Collider Mesh for the attack. Will be enabled during attack")]
+        // or should be taken from the weapon, so need a link to a weapon
+        [SerializeField] 
+        protected MeshCollider _weaponMeshCollider;
+        public MeshCollider GetMeshCollider
+        {
+         
+            get
+            {
+                if (!_weaponMeshCollider)
+                    _weaponMeshCollider = GetComponent<MeshCollider>();
+
+                return _weaponMeshCollider;
+            }
+            set { _weaponMeshCollider = value; }
+        }    
 
         protected Animator _animator;
         public Animator GetAnimator
