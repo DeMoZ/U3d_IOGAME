@@ -13,7 +13,7 @@ namespace TheAttack
         void Attack(string attackStates);
     }
 
-    enum AttackStates
+    public enum AttackStates
     {
         None = 0,       // state with no activity or state wasnt parsed
 

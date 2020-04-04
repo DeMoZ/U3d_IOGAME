@@ -9,11 +9,25 @@ namespace TheAttack
     /// </summary>
     abstract public class Attacks : MonoBehaviour, IAttack
     {
-        [Tooltip("The unic name for the animation. The name will be splited by \":\" from event string to determine if the event is associated with the class")]
+        [Tooltip("The unic name for the animation. Can be an animation name")]
         [SerializeField] protected string _idName;
+        public string GetIdName => _idName;
+
+        protected Animator _animator;
+        public Animator GetAnimator
+        {
+            get
+            {
+                if (!_animator)
+                    _animator = GetComponent<Animator>();
+
+                return _animator;
+            }
+            set { _animator = value; }
+        }
 
         /// <summary>
-        /// Class should receive events from animations with string names
+        /// Class should receive events from animations with string names and parce it
         /// </summary>
         /// <param name="attackStates"></param>
         public void Attack(string attackStates)
@@ -30,7 +44,15 @@ namespace TheAttack
             System.Enum.TryParse(parsed[1], true, out state);
 
             // Debug.Log($"enum = {state}");
+            Attack(state);
+        }
 
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="state"></param>
+        public void Attack(AttackStates state)
+        {
             switch (state)
             {
                 case AttackStates.PreAttack:
