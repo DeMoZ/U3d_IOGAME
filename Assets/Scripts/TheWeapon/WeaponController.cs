@@ -1,56 +1,68 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TheAttack;
 
-namespace TheAttack
+namespace TheWeapon
 {
     /// <summary>
-    /// General state machine for attack animation end behaviour
+    /// keeps information about current weapon. Has link to weapon joint transrorm in the body. Knows weapon Collider, joints, etc.
     /// </summary>
-    abstract public class Attacks : MonoBehaviour, IAttack
+    public class WeaponController : MonoBehaviour, IAttack
     {
-        [Tooltip("The unic name for the animation. Can be an animation name")]
-        [SerializeField] protected string _idName;        
-        public string GetIdName => _idName;
+        [Tooltip("palm right joint in the character body")]
+        [SerializeField] private Transform _palmRightJoint;
 
-        protected Animator _animator;
-        public Animator GetAnimator
+        private AWeapon _currentRightWeapon;
+        private void Awake()
         {
-            get
-            {
-                if (!_animator)
-                    _animator = GetComponent<Animator>();
+            SelfCheck();
+            GetCurrentWeapon();
 
-                return _animator;
-            }
-            set { _animator = value; }
+            //_currentRightWeapon.GetAttack
+        }
+
+        private void SelfCheck()
+        {
+            if (!_palmRightJoint)
+                throw new System.Exception($"PalmRightJoint not set in WeaponController for{gameObject}");
         }
 
         /// <summary>
-        /// Class should receive events from animations with string names and parce it
+        /// Test: Find current armed weapon in right palm joint
+        /// in case that the weapon was already armed
         /// </summary>
-        /// <param name="attackStates"></param>
+        private void GetCurrentWeapon()
+        {
+            if (!_currentRightWeapon)
+                _currentRightWeapon = _palmRightJoint.GetComponentInChildren<AWeapon>();
+        }
+
+
+        public void ActivateCollider(bool value)
+        {
+            if (_currentRightWeapon)
+                _currentRightWeapon.ActivateCollider(value);
+        }
+
         public void Attack(string attackStates)
         {
+
             string[] parsed = attackStates.Split(':');
             if (parsed.Length < 2)
                 throw new System.Exception($"Wrong string value from animation event on {gameObject} hould be ' id:PreStart ' ");
-
-            // if first parth of string value
-            if (_idName != parsed[0]) return;
 
             AttackStates state = AttackStates.None;
 
             System.Enum.TryParse(parsed[1], true, out state);
 
-            // Debug.Log($"enum = {state}");
             Attack(state);
         }
 
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="state"></param>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
         public void Attack(AttackStates state)
         {
             switch (state)
@@ -80,26 +92,32 @@ namespace TheAttack
         /// <summary>
         /// event for movement befoure attack
         /// </summary>
-        public abstract void PreAttack();
+        protected void PreAttack() { }
 
         /// <summary>
         /// Damage trigger should be placed here
         /// </summary>
-        public abstract void StartAttack();
+        protected void StartAttack()
+        {
+            _currentRightWeapon.ActivateCollider(true);
+        }
 
         /// <summary>
         /// Damage grigger should be removed here
         /// </summary>
-        public abstract void EndAttack();
+        protected void EndAttack()
+        {
+            _currentRightWeapon.ActivateCollider(false);
+        }
 
         /// <summary>
         /// event for movement after attack
         /// </summary>
-        public abstract void PostAttack();
+        protected void PostAttack() { }
 
         /// <summary>
         /// wrong method name is set in animation event
         /// </summary>
-        public abstract void None();
+        protected void None() { }
     }
 }

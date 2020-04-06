@@ -23,15 +23,6 @@ namespace TheAttack
             GetAnimator.SetLayerWeight(layer, weight);
         }
 
-        /// <summary>
-        /// enable/disable mesh collider
-        /// </summary>
-        /// <param name="value"></param>
-        void EnableMeshCollider(bool value)
-        {
-
-        }
-
         public override void EndAttack()
         {
             // SetLayerWeight(_attackLayer, 0);

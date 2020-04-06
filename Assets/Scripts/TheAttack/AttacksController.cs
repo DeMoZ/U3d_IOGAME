@@ -7,8 +7,8 @@ namespace TheAttack
     /// <summary>
     /// Collects all animations from pointed gameobject and keep in dictionary to forward animations events for asociated action class
     /// </summary>
-    [RequireComponent(typeof (Animator))]
-        public class AttacksController : MonoBehaviour, IAttack
+    [RequireComponent(typeof(Animator))]
+    public class AttacksController : MonoBehaviour, IAttack
     {
         [Tooltip("The game object which contains all the classes related to animations")]
         [SerializeField] GameObject _animationsFolder;
