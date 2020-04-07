@@ -15,7 +15,7 @@ namespace TheAttack
         /// <summary>
         /// Dictionary of all the attacks for the person
         /// </summary>
-        private Dictionary<string, Attacks> _attacksDict = new Dictionary<string, Attacks>();
+        private Dictionary<string, AbstractAttack> _attacksDict = new Dictionary<string, AbstractAttack>();
 
         private Animator _animator;
 
@@ -56,9 +56,9 @@ namespace TheAttack
         /// </summary>
         private void FindAnimations()
         {
-            Attacks[] _attacks = _animationsFolder.GetComponents<Attacks>();
+            AbstractAttack[] _attacks = _animationsFolder.GetComponents<AbstractAttack>();
 
-            foreach (Attacks attack in _attacks)
+            foreach (AbstractAttack attack in _attacks)
             {
                 if (!_attacksDict.ContainsKey(attack.GetIdName))
                 {

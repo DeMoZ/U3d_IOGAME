@@ -7,10 +7,15 @@ namespace TheAttack
     /// <summary>
     /// General state machine for attack animation end behaviour
     /// </summary>
-    abstract public class Attacks : MonoBehaviour, IAttack
+    abstract public class AbstractAttack : MonoBehaviour, IAttack
     {
         [Tooltip("The unic name for the animation. Can be an animation name")]
-        [SerializeField] protected string _idName;        
+        [SerializeField] protected string _idName;
+
+        [SerializeField] protected string _animatorAttackLayer = "Attack";
+
+        private LayerMask _attackLayer;
+
         public string GetIdName => _idName;
 
         protected Animator _animator;
@@ -24,6 +29,16 @@ namespace TheAttack
                 return _animator;
             }
             set { _animator = value; }
+        }
+
+        private void Start()
+        {
+            _attackLayer = GetAnimator.GetLayerIndex(_animatorAttackLayer);
+        }
+
+        protected void SetLayerWeight(int layer, float weight)
+        {
+            GetAnimator.SetLayerWeight(layer, weight);
         }
 
         /// <summary>
@@ -47,10 +62,10 @@ namespace TheAttack
             Attack(state);
         }
 
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="state"></param>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
         public void Attack(AttackStates state)
         {
             switch (state)
@@ -80,26 +95,33 @@ namespace TheAttack
         /// <summary>
         /// event for movement befoure attack
         /// </summary>
-        public abstract void PreAttack();
+        protected virtual void PreAttack()
+        {
+            SetLayerWeight(_attackLayer, 1);
+        }
 
         /// <summary>
         /// Damage trigger should be placed here
         /// </summary>
-        public abstract void StartAttack();
+        protected virtual void StartAttack() { }
 
         /// <summary>
         /// Damage grigger should be removed here
         /// </summary>
-        public abstract void EndAttack();
+        protected virtual void EndAttack() { }
 
         /// <summary>
         /// event for movement after attack
         /// </summary>
-        public abstract void PostAttack();
+        protected virtual void PostAttack()
+        {
+            SetLayerWeight(_attackLayer, 0.001f);
+
+        }
 
         /// <summary>
         /// wrong method name is set in animation event
         /// </summary>
-        public abstract void None();
+        protected virtual void None() { }
     }
 }
