@@ -9,7 +9,7 @@ namespace TheWeapon
         [SerializeField] private float _attack = 1;
         public float GetAttack => _attack;
        
-        private bool _allowTrigger;
+        private bool _allowTrigger=true;
         public bool GetAllowTrigger => _allowTrigger;
 
         private MeshCollider _meshCollider;

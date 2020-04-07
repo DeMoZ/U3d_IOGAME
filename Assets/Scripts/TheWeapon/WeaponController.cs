@@ -19,7 +19,7 @@ namespace TheWeapon
             SelfCheck();
             GetCurrentWeapon();
 
-            //_currentRightWeapon.GetAttack
+            _currentRightWeapon.SubscribeMeOnHitCollider(TestOnWeaponHit);
         }
 
         private void SelfCheck()
@@ -119,5 +119,10 @@ namespace TheWeapon
         /// wrong method name is set in animation event
         /// </summary>
         protected void None() { }
+
+        private void TestOnWeaponHit(Collider other)
+        {
+            Debug.Log($"Weapon hit someone {other.name}");
+        }
     }
 }
