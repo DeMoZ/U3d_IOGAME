@@ -8,7 +8,7 @@ namespace TheWeapon
     /// <summary>
     /// keeps information about current weapon. Has link to weapon joint transrorm in the body. Knows weapon Collider, joints, etc.
     /// </summary>
-    public class WeaponController : MonoBehaviour, IAttack
+    public class WeaponController : AbstractAttack
     {
         [Tooltip("palm right joint in the character body")]
         [SerializeField] private Transform _palmRightJoint;
@@ -45,20 +45,6 @@ namespace TheWeapon
                 _currentRightWeapon.ActivateCollider(value);
         }
 
-        public void Attack(string attackStates)
-        {
-
-            string[] parsed = attackStates.Split(':');
-            if (parsed.Length < 2)
-                throw new System.Exception($"Wrong string value from animation event on {gameObject} hould be ' id:PreStart ' ");
-
-            AttackStates state = AttackStates.None;
-
-            System.Enum.TryParse(parsed[1], true, out state);
-
-            Attack(state);
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -92,12 +78,12 @@ namespace TheWeapon
         /// <summary>
         /// event for movement befoure attack
         /// </summary>
-        protected void PreAttack() { }
+        public override void PreAttack() { }
 
         /// <summary>
         /// Damage trigger should be placed here
         /// </summary>
-        protected void StartAttack()
+        public override void StartAttack()
         {
             _currentRightWeapon.ActivateCollider(true);
         }
@@ -105,7 +91,7 @@ namespace TheWeapon
         /// <summary>
         /// Damage grigger should be removed here
         /// </summary>
-        protected void EndAttack()
+        public override void EndAttack()
         {
             _currentRightWeapon.ActivateCollider(false);
         }
@@ -113,11 +99,13 @@ namespace TheWeapon
         /// <summary>
         /// event for movement after attack
         /// </summary>
-        protected void PostAttack() { }
+        public override void PostAttack() { }
 
         /// <summary>
         /// wrong method name is set in animation event
         /// </summary>
-        protected void None() { }
+        public override void None() { }
+
+
     }
 }

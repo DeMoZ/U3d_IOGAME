@@ -1,19 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 namespace TheAttack
 {
-    /// <summary>
-    /// General state machine for attack animation end behaviour
-    /// </summary>
-    abstract public class Attacks : MonoBehaviour, IAttack
+
+    [RequireComponent(typeof(Animator))]
+    public class Attacks : AbstractAttack
     {
-        [Tooltip("The unic name for the animation. Can be an animation name")]
-        [SerializeField] protected string _idName;        
+        [SerializeField] private string _idName = "Simple";
         public string GetIdName => _idName;
 
-        protected Animator _animator;
+        [SerializeField] private string _animatorAttackLayer = "Attack";
+
+        private Animator _animator;
         public Animator GetAnimator
         {
             get
@@ -23,14 +24,11 @@ namespace TheAttack
 
                 return _animator;
             }
-            set { _animator = value; }
         }
 
-        /// <summary>
-        /// Class should receive events from animations with string names and parce it
-        /// </summary>
-        /// <param name="attackStates"></param>
-        public void Attack(string attackStates)
+        private LayerMask _attackLayer;
+
+        public virtual void Attack(string attackStates)
         {
             string[] parsed = attackStates.Split(':');
             if (parsed.Length < 2)
@@ -46,60 +44,49 @@ namespace TheAttack
             // Debug.Log($"enum = {state}");
             Attack(state);
         }
-
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="state"></param>
-        public void Attack(AttackStates state)
+        private void Start()
         {
-            switch (state)
-            {
-                case AttackStates.PreAttack:
-                    PreAttack();
-                    break;
-
-                case AttackStates.StartAttack:
-                    StartAttack();
-                    break;
-
-                case AttackStates.EndAttack:
-                    EndAttack();
-                    break;
-
-                case AttackStates.PostAttack:
-                    PostAttack();
-                    break;
-
-                default:        // IAttack.AttackStates.None
-                    None();
-                    break;
-            }
+            _attackLayer = GetAnimator.GetLayerIndex(_animatorAttackLayer);
         }
 
-        /// <summary>
-        /// event for movement befoure attack
-        /// </summary>
-        public abstract void PreAttack();
+        void SetLayerWeight(int layer, float weight)
+        {
+            GetAnimator.SetLayerWeight(layer, weight);
+        }
+
+        public override void EndAttack()
+        {
+            // SetLayerWeight(_attackLayer, 0);
+        }
+
+        public override void None()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void PostAttack()
+        {
+            SetLayerWeight(_attackLayer, 0.001f);
+        }
+
+        public override void PreAttack()
+        {
+            SetLayerWeight(_attackLayer, 1);
+        }
+
+        public override void StartAttack()
+        {
+            //SetLayerWeight(_attackLayer, 1);
+        }
+
 
         /// <summary>
-        /// Damage trigger should be placed here
+        /// need to check by calling class by the interface iAttack
+        /// можно метод задать в интерфейсе и реализовать в абстрактном классе и сделать абстрактным!!!
         /// </summary>
-        public abstract void StartAttack();
-
-        /// <summary>
-        /// Damage grigger should be removed here
-        /// </summary>
-        public abstract void EndAttack();
-
-        /// <summary>
-        /// event for movement after attack
-        /// </summary>
-        public abstract void PostAttack();
-
-        /// <summary>
-        /// wrong method name is set in animation event
-        /// </summary>
-        public abstract void None();
+        public void CheckIfInterfaceStillWorks()
+        {
+            Debug.Log("for sure it works");
+        }
     }
 }
