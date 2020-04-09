@@ -32,7 +32,6 @@ namespace TheMove
             _transform = transform;
 
             _navMeshAgent.speed = _speed;
-
         }
 
         public void Move(Vector3 direction)
