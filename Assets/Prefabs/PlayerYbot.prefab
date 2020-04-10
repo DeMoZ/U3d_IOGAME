@@ -2336,6 +2336,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _palmRightJoint: {fileID: 3982210572725454978}
+  _attackCollider: {fileID: 5224092652471304760, guid: fe947b52b47427443abf734c7844a4ac,
+    type: 3}
 --- !u!143 &-4846878371797406926
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2368,7 +2370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _speed: 2
+  _speed: 20
   _animatorMoveRight: MoveRight
   _animatorMoveForward: MoveForward
 --- !u!1 &7379741306046043495

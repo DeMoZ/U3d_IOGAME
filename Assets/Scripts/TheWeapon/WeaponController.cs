@@ -13,6 +13,29 @@ namespace TheWeapon
         [Tooltip("palm right joint in the character body")]
         [SerializeField] private Transform _palmRightJoint;
 
+        [Tooltip("Collider prefab for attack")]
+        [SerializeField] private GameObject _attackCollider;
+        private Transform _attackColliderT;
+        private Transform GetAttackCollider
+        {
+            get
+            {
+                if (!_attackColliderT)
+                {
+                    if (!_attackCollider)
+                        throw new System.Exception($"No Attack Collider on {this}");
+
+                    _attackColliderT = Instantiate(_attackCollider).transform;
+                }
+                return _attackColliderT;
+            }
+        }
+
+        private Coroutine _colliderRoutine;
+        private bool _triggerActive = false;
+
+        private AttackStates _attackStates;
+
         private AWeapon _currentRightWeapon;
         private void Awake()
         {
@@ -92,7 +115,11 @@ namespace TheWeapon
         /// <summary>
         /// event for movement befoure attack
         /// </summary>
-        protected void PreAttack() { }
+        protected void PreAttack()
+        {
+
+
+        }
 
         /// <summary>
         /// Damage trigger should be placed here
@@ -100,6 +127,7 @@ namespace TheWeapon
         protected void StartAttack()
         {
             _currentRightWeapon.ActivateCollider(true);
+            WeaponCollider();
         }
 
         /// <summary>
@@ -108,6 +136,7 @@ namespace TheWeapon
         protected void EndAttack()
         {
             _currentRightWeapon.ActivateCollider(false);
+            _triggerActive = false;
         }
 
         /// <summary>
@@ -123,6 +152,47 @@ namespace TheWeapon
         private void TestOnWeaponHit(Collider other)
         {
             Debug.Log($"Weapon hit someone {other.name}");
+        }
+
+        private void WeaponCollider()
+        {
+            if (_colliderRoutine != null)
+            {
+                StopCoroutine(_colliderRoutine);
+                ResetWeaponCollider();
+            }
+
+            _colliderRoutine = StartCoroutine(WeaponColliderPositioning());
+        }
+
+        /// <summary>
+        /// reset collider properties to inactive status
+        /// </summary>
+        private void ResetWeaponCollider()
+        {
+            GetAttackCollider.gameObject.SetActive(false);
+        }
+
+        private IEnumerator WeaponColliderPositioning()
+        {
+            _triggerActive = true;
+
+            GetAttackCollider.position = _palmRightJoint.position;
+            GetAttackCollider.rotation = _palmRightJoint.rotation;
+
+            GetAttackCollider.gameObject.SetActive(true);
+
+            while (_triggerActive)
+            {
+                GetAttackCollider.position = _palmRightJoint.position;
+                GetAttackCollider.rotation = _palmRightJoint.rotation;
+
+                yield return null;
+            }
+
+            yield return null;
+
+            ResetWeaponCollider();
         }
     }
 }
