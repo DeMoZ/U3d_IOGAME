@@ -6,7 +6,8 @@ using TheAttack;
 namespace TheWeapon
 {
     /// <summary>
-    /// keeps information about current weapon. Has link to weapon joint transrorm in the body. Knows weapon Collider, joints, etc.
+    /// keeps information about current weapon. Has link to weapon joint transrorm in the body.
+    /// Knows weapon Collider, joints, etc.
     /// </summary>
     public class WeaponController : MonoBehaviour, IAttack
     {
@@ -26,8 +27,35 @@ namespace TheWeapon
                         throw new System.Exception($"No Attack Collider on {this}");
 
                     _attackColliderT = Instantiate(_attackCollider).transform;
+
+                    _attackColliderT.parent = transform;
+
+                    _attackColliderT.localScale = GetAttackColliderBounds;
+
+                    ResetWeaponCollider();
                 }
+
                 return _attackColliderT;
+            }
+        }
+
+        private Vector3 _attackColliderBounds = new Vector3(0.1f, 0.1f, 0.1f);
+        private Vector3 GetAttackColliderBounds
+        {
+            get
+            {
+                if (GetCurrentRightWeapon)
+                {
+                    if (_attackColliderBounds != _currentRightWeapon.GetColliderBounds)
+                        _attackColliderBounds = _currentRightWeapon.GetColliderBounds;
+                }
+                else
+                {
+                    Debug.LogError($"gameObject {this.name} has no weapon so fist sized bounds are returned");
+                    _attackColliderBounds = new Vector3(0.1f, 0.1f, 0.1f);
+                }
+
+                return _attackColliderBounds;
             }
         }
 
@@ -37,12 +65,28 @@ namespace TheWeapon
         private AttackStates _attackStates;
 
         private AWeapon _currentRightWeapon;
+        private AWeapon GetCurrentRightWeapon
+        {
+            get
+            {
+                if (!_currentRightWeapon)
+                    _currentRightWeapon = _palmRightJoint.GetComponentInChildren<AWeapon>();
+
+                return _currentRightWeapon;
+            }
+        }
+
+        private WeaponCollider _weaponCollider;
+
         private void Awake()
         {
             SelfCheck();
-            GetCurrentWeapon();
 
-            _currentRightWeapon.SubscribeMeOnHitCollider(TestOnWeaponHit);
+            _weaponCollider = GetAttackCollider.GetComponent<WeaponCollider>();
+            _weaponCollider.SubscribeMeOnHitCollider(TestOnWeaponHit);
+
+            if (!_currentRightWeapon)
+                _currentRightWeapon = _palmRightJoint.GetComponentInChildren<AWeapon>();
         }
 
         private void SelfCheck()
@@ -55,17 +99,9 @@ namespace TheWeapon
         /// Test: Find current armed weapon in right palm joint
         /// in case that the weapon was already armed
         /// </summary>
-        private void GetCurrentWeapon()
-        {
-            if (!_currentRightWeapon)
-                _currentRightWeapon = _palmRightJoint.GetComponentInChildren<AWeapon>();
-        }
-
-
         public void ActivateCollider(bool value)
         {
-            if (_currentRightWeapon)
-                _currentRightWeapon.ActivateCollider(value);
+            _weaponCollider.ActivateCollider(value);
         }
 
         public void Attack(string attackStates)
@@ -126,7 +162,7 @@ namespace TheWeapon
         /// </summary>
         protected void StartAttack()
         {
-            _currentRightWeapon.ActivateCollider(true);
+            _weaponCollider.ActivateCollider(true);
             WeaponCollider();
         }
 
@@ -135,7 +171,7 @@ namespace TheWeapon
         /// </summary>
         protected void EndAttack()
         {
-            _currentRightWeapon.ActivateCollider(false);
+            _weaponCollider.ActivateCollider(false);
             _triggerActive = false;
         }
 
@@ -194,5 +230,7 @@ namespace TheWeapon
 
             ResetWeaponCollider();
         }
+
+
     }
 }

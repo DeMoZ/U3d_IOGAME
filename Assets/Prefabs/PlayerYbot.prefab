@@ -1473,6 +1473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755ba024239e62f428a6081ba3fb48e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _colliderBounds: {x: 0.2, y: 2, z: 1}
   _attack: 1
 --- !u!1 &5080113394615498081
 GameObject:
@@ -2336,7 +2337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _palmRightJoint: {fileID: 3982210572725454978}
-  _attackCollider: {fileID: 5224092652471304760, guid: fe947b52b47427443abf734c7844a4ac,
+  _attackCollider: {fileID: 5370211433113918137, guid: 80e16636f1e43404085a18bba9924b22,
     type: 3}
 --- !u!143 &-4846878371797406926
 CharacterController:

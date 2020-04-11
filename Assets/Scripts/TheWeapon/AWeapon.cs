@@ -4,42 +4,45 @@ using UnityEngine;
 
 namespace TheWeapon
 {
-    public class AWeapon : MonoBehaviour, IWeapon
+    public class AWeapon : MonoBehaviour//, IWeapon
     {
+        [SerializeField] private Vector3 _colliderBounds = Vector3.one;
+        public Vector3 GetColliderBounds => _colliderBounds;
+
         [SerializeField] private float _attack = 1;
         public float GetAttack => _attack;
        
-        private bool _allowTrigger=true;
-        public bool GetAllowTrigger => _allowTrigger;
+        //private bool _allowTrigger=true;
+        //public bool GetAllowTrigger => _allowTrigger;
 
-        private MeshCollider _meshCollider;
-        public MeshCollider GetMeshCollider
-        {
-            get
-            {
-                if (!_meshCollider)
-                    _meshCollider = GetComponent<MeshCollider>();
+        //private MeshCollider _meshCollider;
+        //public MeshCollider GetMeshCollider
+        //{
+        //    get
+        //    {
+        //        if (!_meshCollider)
+        //            _meshCollider = GetComponent<MeshCollider>();
 
-                return _meshCollider;
-            }
-        }
+        //        return _meshCollider;
+        //    }
+        //}
 
-        // Event when weapon model contacted with something
-        public delegate void HitTriggered(Collider other);
-        public event HitTriggered OnHitTriggered;
-        public void SubscribeMeOnHitCollider(HitTriggered callback)
-        {
-            OnHitTriggered += callback;
-        }
+        //// Event when weapon model contacted with something
+        //public delegate void HitTriggered(Collider other);
+        //public event HitTriggered OnHitTriggered;
+        //public void SubscribeMeOnHitCollider(HitTriggered callback)
+        //{
+        //    OnHitTriggered += callback;
+        //}
 
 
-        private void OnTriggerEnter(Collider other)
-        {
-            Debug.Log($"{this} OnTriggerEnter other= {other.name}");
-            // if condition
-            if (_allowTrigger)
-                OnHitTriggered.Invoke(other);
-        }
+        //private void OnTriggerEnter(Collider other)
+        //{
+        //    Debug.Log($"{this} OnTriggerEnter other= {other.name}");
+        //    // if condition
+        //    if (_allowTrigger)
+        //        OnHitTriggered.Invoke(other);
+        //}
 
         //private void OnCollisionEnter(Collision other)
         //{
@@ -47,37 +50,37 @@ namespace TheWeapon
 
         //}
 
-        private void OnDestroy()
-        {
-            OnHitTriggered = null;
-        }
+        //private void OnDestroy()
+        //{
+        //    OnHitTriggered = null;
+        //}
 
-        public void Atack()
-        {
-            throw new System.NotImplementedException();
-        }
+        //public void Atack()
+        //{
+        //    //throw new System.NotImplementedException();
+        //}
 
-        /// <summary>
-        /// Activate / Disactivate weapon collider
-        /// </summary>
-        /// <param name="value"></param>
-        public void ActivateCollider(bool value)
-        {
-            GetMeshCollider.enabled = value;
-        }
+        ///// <summary>
+        ///// Activate / Disactivate weapon collider
+        ///// </summary>
+        ///// <param name="value"></param>
+        //public void ActivateCollider(bool value)
+        //{
+        //    GetMeshCollider.enabled = value;
+        //}
 
-        private void Awake()
-        {
-            Initialize();
-        }
+        //private void Awake()
+        //{
+        //    Initialize();
+        //}
 
-        protected void Initialize()
-        {          
-                _meshCollider = GetComponent<MeshCollider>();
+        //protected void Initialize()
+        //{          
+        //        _meshCollider = GetComponent<MeshCollider>();
 
-            if (!_meshCollider) throw new System.Exception($"There is no MeshCollider on {gameObject}");
+        //    if (!_meshCollider) throw new System.Exception($"There is no MeshCollider on {gameObject}");
 
-                ActivateCollider(false);
-        }
+        //        ActivateCollider(false);
+        //}
     }
 }
