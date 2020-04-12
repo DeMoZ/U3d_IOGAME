@@ -20,45 +20,25 @@ namespace TheWeapon
         [SerializeField] private Transform _palmRightJoint;
 
         /// <summary>
-        /// weapon collider game object with box dynamic box collider will be generated
+        /// attack collider script on attack collider object
         /// </summary>
-        private Transform _weaponColliderT;
-        private Transform GetWeaponColliderT
+        private AttackCollider _attackCollider;
+        private AttackCollider GetAttackCollider
         {
             get
             {
-                if (!_weaponColliderT)
-                {
-                    _weaponColliderT = new GameObject().transform;
-                    _weaponColliderT.name = "WeaponCollider";
-                    _weaponColliderT.parent = transform;
-                }
+                if (!_attackCollider)
+                    CreateWeaponCollider();
 
-                return _weaponColliderT;
+                return _attackCollider;
             }
         }
 
-        private readonly object _boxlock = new object();
-
-        private BoxCollider _boxCollider;
-        private BoxCollider GetBoxCollider
-        {
-            get
-            {
-                if (!_boxCollider)
-                {
-                    _boxCollider = GetWeaponColliderT.gameObject.AddComponent<BoxCollider>();
-                    _boxCollider.isTrigger = true;
-                }
-
-                return _boxCollider;
-            }
-        }
-
+        /// <summary>
+        /// Attack collider is active during routine
+        /// </summary>
         private Coroutine _colliderRoutine;
         private bool _triggerActive = false;
-
-        private AttackStates _attackStates;
 
         private AWeapon _currentRightWeapon;
         private AWeapon GetCurrentRightWeapon
@@ -72,37 +52,25 @@ namespace TheWeapon
             }
         }
 
-        private WeaponCollider _weaponCollider;
-        private WeaponCollider GetWeaponCollider
-        {
-            get
-            {
-                if (!_weaponCollider)
-                {
-                    _weaponCollider = GetWeaponColliderT.gameObject.AddComponent<WeaponCollider>();
-                }
-
-                return _weaponCollider;
-            }
-        }
-
         private Transform _transform;
         private void Awake()
         {
             _transform = transform;
 
-            GetWeaponCollider.SubscribeMeOnHitCollider(OnWeaponTriggerEnter);
+            CreateWeaponCollider();
 
-            SelfCheck();
-
-            if (!_currentRightWeapon)
-                _currentRightWeapon = _palmRightJoint.GetComponentInChildren<AWeapon>();
-        }
-
-        private void SelfCheck()
-        {
             if (!_palmRightJoint)
-                throw new System.Exception($"PalmRightJoint not set in WeaponController for{gameObject}");
+                throw new System.Exception($"PalmRightJoint not set in WeaponController for{gameObject}");            
+        }
+        private void CreateWeaponCollider()
+        {
+            GameObject go = new GameObject();
+            go.name = "WeaponCollider";
+            go.transform.parent = transform;
+
+            _attackCollider = go.AddComponent<AttackCollider>();
+            _attackCollider.Initialize(_colliderHeight, _colliderWidth);
+            _attackCollider.SubscribeMeOnHitCollider(TestOnWeaponHit);
         }
 
         public void Attack(string attackStates)
@@ -183,85 +151,38 @@ namespace TheWeapon
         /// wrong method name is set in animation event
         /// </summary>
         protected void None() { }
-
-        private void TestOnWeaponHit(Collider other)
-        {
-            Debug.Log($"Weapon hit someone {other.name}");
-        }
-
+              
         private void WeaponCollider()
         {
             if (_colliderRoutine != null)
             {
                 StopCoroutine(_colliderRoutine);
-                ResetWeaponCollider();
+                GetAttackCollider.SetReset();
             }
 
             _colliderRoutine = StartCoroutine(WeaponColliderPositioning());
         }
-
-        /// <summary>
-        /// reset collider properties to inactive status
-        /// </summary>
-        private void ResetWeaponCollider()
-        {
-            GetBoxCollider.enabled = false;
-        }
-
+       
         private IEnumerator WeaponColliderPositioning()
         {
             _triggerActive = true;
 
-            ColliderPositionSizeRotation();
+            GetAttackCollider.SetCollider(_transform, GetCurrentRightWeapon.GetHandle, GetCurrentRightWeapon.GetPike);
 
-            GetBoxCollider.enabled = true;
+            GetAttackCollider.GetBoxCollider.enabled = true;
 
             while (_triggerActive)
             {
-                ColliderPositionSizeRotation();
+                GetAttackCollider.SetCollider(_transform, GetCurrentRightWeapon.GetHandle, GetCurrentRightWeapon.GetPike);
 
                 yield return null;
             }
 
             yield return null;
 
-            ResetWeaponCollider();
+            GetAttackCollider.SetReset();
         }
-
-        /// <summary>
-        /// move and rotate collider on scene acording anamated weapon
-        /// </summary>
-        private void ColliderPositionSizeRotation()
-        {
-            Vector3 handlePosition, pikePosition;
-            Vector3 size = new Vector3(_colliderWidth, _colliderHeight, 1);
-            Quaternion rotation = new Quaternion();
-
-            // collider position
-            handlePosition = _currentRightWeapon.GetHandle.position;
-            //handlePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetHandle.position);
-            handlePosition.y = _transform.position.y;
-
-            pikePosition = _currentRightWeapon.GetPike.position;
-            //pikePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetPike.position);
-            pikePosition.y = _transform.position.y;
-
-            // collider size 
-            size.y = _currentRightWeapon.GetPike.position.y - _transform.position.y;
-            size.y = size.y > _colliderHeight ? size.y : _colliderHeight;
-
-            size.z = Vector3.Distance(pikePosition, handlePosition);
-
-            // collider rotation
-            rotation = Quaternion.LookRotation(pikePosition - handlePosition);
-
-            // apply
-            GetBoxCollider.size = size;
-            GetBoxCollider.center = size / 2;
-            GetWeaponColliderT.position = handlePosition;
-            GetWeaponColliderT.rotation = rotation;
-        }
-
+               
         //private void Update()
         //{
         //    if (_triggerActive)
@@ -278,7 +199,7 @@ namespace TheWeapon
         //    GetBoxCollider.enabled = active;
         //}
 
-        private void OnWeaponTriggerEnter(Collider other)
+        private void TestOnWeaponHit(Collider other)
         {
             Debug.Log($"{gameObject.name} hit {other.name}");
         }
