@@ -11,6 +11,11 @@ namespace TheWeapon
     /// </summary>
     public class WeaponController : MonoBehaviour, IAttack
     {
+        [Tooltip("collider height - minimal height")]
+        [SerializeField] private float _colliderHeight = 1.8f;
+        [Tooltip("collider width - constant")]
+        [SerializeField] private float _colliderWidth = 0.2f;
+
         [Tooltip("palm right joint in the character body")]
         [SerializeField] private Transform _palmRightJoint;
 
@@ -249,22 +254,24 @@ namespace TheWeapon
 
         private void ColliderPositionSizeRotation()
         {
-            Vector3 handlePosition, pikePosition, size;
+            Vector3 handlePosition, pikePosition;
+            Vector3 size = new Vector3(_colliderWidth, _colliderHeight, 1);
             Quaternion rotation;
 
-            // position
+            // collider position
             handlePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetHandle.position);
             handlePosition.y = _transform.position.y;
 
             pikePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetPike.position);
             pikePosition.y = _transform.position.y;
 
-            // size
-            float len = Vector3.Distance(pikePosition, handlePosition);
-           // float height = 
-            size = new Vector3(0.2f, 2, len);
+            // collider size
+            size.y = (_currentRightWeapon.GetPike.position - _transform.position).y;
+            size.y = size.y > _colliderHeight ? size.y : _colliderHeight;
+            
+            size.z = Vector3.Distance(pikePosition, handlePosition);
 
-            // rotation
+            // collider rotation
             rotation = Quaternion.LookRotation(pikePosition - handlePosition);
 
             // apply
@@ -273,15 +280,15 @@ namespace TheWeapon
             GetAttackCollider.rotation = rotation;
         }
 
-        Vector3? _gismopos;
-        private void OnDrawGizmos()
-        {
-            if (_gismopos != null)
-            {
-                Color c = Color.red;
-                Gizmos.color = c;
-                Gizmos.DrawSphere((Vector3)_gismopos, 10f);
-            }
-        }
+        //Vector3? _gismopos;
+        //private void OnDrawGizmos()
+        //{
+        //    if (_gismopos != null)
+        //    {
+        //        Color c = Color.red;
+        //        Gizmos.color = c;
+        //        Gizmos.DrawSphere((Vector3)_gismopos, 10f);
+        //    }
+        //}
     }
 }
