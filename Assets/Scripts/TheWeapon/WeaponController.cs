@@ -172,6 +172,7 @@ namespace TheWeapon
         {
             _weaponCollider.ActivateCollider(true);
             WeaponCollider();
+            //TriggerEnable(true);
         }
 
         /// <summary>
@@ -181,6 +182,7 @@ namespace TheWeapon
         {
             _weaponCollider.ActivateCollider(false);
             _triggerActive = false;
+            //TriggerEnable(false);
         }
 
         /// <summary>
@@ -220,11 +222,8 @@ namespace TheWeapon
         private IEnumerator WeaponColliderPositioning()
         {
             _triggerActive = true;
-
-            // world position of palm invers in body trnasfom local position
-            ColliderPositioning();
-
-            //GetAttackCollider.rotation = _palmRightJoint.rotation;
+            
+            ColliderPositionSizeRotation();
 
             GetAttackCollider.gameObject.SetActive(true);
 
@@ -239,56 +238,55 @@ namespace TheWeapon
 
             ResetWeaponCollider();
         }
-
+       
         /// <summary>
-        /// world position of palm invers in body trnasfom local position
+        /// move and rotate collider on scene acording anamated weapon
         /// </summary>
-        private void ColliderPositioning()
-        {
-            Vector3 position;
-
-            position = _transform.position + _transform.InverseTransformPoint(_palmRightJoint.position);
-            position.y = _transform.position.y;
-            GetAttackCollider.position = position;
-        }
-
         private void ColliderPositionSizeRotation()
         {
             Vector3 handlePosition, pikePosition;
             Vector3 size = new Vector3(_colliderWidth, _colliderHeight, 1);
-            Quaternion rotation;
+            Quaternion rotation = new Quaternion();
 
             // collider position
-            handlePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetHandle.position);
+             handlePosition = _currentRightWeapon.GetHandle.position;
+            //handlePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetHandle.position);
             handlePosition.y = _transform.position.y;
 
-            pikePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetPike.position);
+            pikePosition = _currentRightWeapon.GetPike.position;
+            //pikePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetPike.position);
             pikePosition.y = _transform.position.y;
 
-            // collider size
-            size.y = (_currentRightWeapon.GetPike.position - _transform.position).y;
+            // collider size 
+            size.y = _currentRightWeapon.GetPike.position.y - _transform.position.y;
             size.y = size.y > _colliderHeight ? size.y : _colliderHeight;
-            
+
             size.z = Vector3.Distance(pikePosition, handlePosition);
 
             // collider rotation
-            rotation = Quaternion.LookRotation(pikePosition - handlePosition);
-
+             rotation = Quaternion.LookRotation(pikePosition - handlePosition);
+           
             // apply
-            GetAttackCollider.position = handlePosition;
             GetAttackCollider.localScale = size;
+            GetAttackCollider.position = handlePosition;
             GetAttackCollider.rotation = rotation;
         }
 
-        //Vector3? _gismopos;
-        //private void OnDrawGizmos()
+        //private void Update()
         //{
-        //    if (_gismopos != null)
+        //    if (_triggerActive)
         //    {
-        //        Color c = Color.red;
-        //        Gizmos.color = c;
-        //        Gizmos.DrawSphere((Vector3)_gismopos, 10f);
+        //        ColliderPositionSizeRotation();
         //    }
         //}
+
+        private void TriggerEnable(bool active)
+        {
+            ColliderPositionSizeRotation();
+
+            _triggerActive = active;
+            GetAttackCollider.gameObject.SetActive(active);
+            //_weaponCollider.ActivateCollider(active);
+        }
     }
 }
