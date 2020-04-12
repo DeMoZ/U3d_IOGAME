@@ -4,26 +4,11 @@ using UnityEngine;
 
 namespace TheWeapon
 {
+    /// <summary>
+    /// Script for weapon collider. Applayed on the object with Weapon Controller
+    /// </summary>
     public class WeaponCollider : MonoBehaviour, IWeapon
     {
-        private bool _allowTrigger = true;
-        public bool GetAllowTrigger => _allowTrigger;
-
-        //private MeshCollider _meshCollider;
-        //public MeshCollider GetMeshCollider
-        private BoxCollider _meshCollider;
-        public BoxCollider GetMeshCollider
-        {
-            get
-            {
-                if (!_meshCollider)
-                    _meshCollider = GetComponent<BoxCollider>();
-                //_meshCollider = GetComponent<MeshCollider>();
-
-                return _meshCollider;
-            }
-        }
-
         // Event when weapon model contacted with something
         public delegate void HitTriggered(Collider other);
         public event HitTriggered OnHitTriggered;
@@ -36,9 +21,7 @@ namespace TheWeapon
         private void OnTriggerEnter(Collider other)
         {
             Debug.Log($"{this} OnTriggerEnter other= {other.name}");
-            // if condition
-            if (_allowTrigger)
-                OnHitTriggered?.Invoke(other);
+            OnHitTriggered?.Invoke(other);
         }
 
 
@@ -47,29 +30,10 @@ namespace TheWeapon
             OnHitTriggered = null;
         }
 
-        /// <summary>
-        /// Activate / Disactivate weapon collider
-        /// </summary>
-        /// <param name="value"></param>
-        public void ActivateCollider(bool value)
-        {
-            GetMeshCollider.enabled = value;
-        }
-
         private void Awake()
         {
-            Initialize();
         }
 
-        protected void Initialize()
-        {
-            _meshCollider = GetComponent<BoxCollider>();
-            //_meshCollider = GetComponent<MeshCollider>();
-
-            if (!_meshCollider) throw new System.Exception($"There is no MeshCollider on {gameObject}");
-
-            ActivateCollider(false);
-        }
 
         public void Atack()
         {
