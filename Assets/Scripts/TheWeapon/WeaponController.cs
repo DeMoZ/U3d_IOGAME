@@ -78,8 +78,11 @@ namespace TheWeapon
 
         private WeaponCollider _weaponCollider;
 
+        private Transform _transform;
         private void Awake()
         {
+            _transform = transform;
+
             SelfCheck();
 
             _weaponCollider = GetAttackCollider.GetComponent<WeaponCollider>();
@@ -213,15 +216,16 @@ namespace TheWeapon
         {
             _triggerActive = true;
 
-            GetAttackCollider.position = _palmRightJoint.position;
-            GetAttackCollider.rotation = _palmRightJoint.rotation;
+            // world position of palm invers in body trnasfom local position
+            ColliderPositioning();
+
+            //GetAttackCollider.rotation = _palmRightJoint.rotation;
 
             GetAttackCollider.gameObject.SetActive(true);
 
             while (_triggerActive)
             {
-                GetAttackCollider.position = _palmRightJoint.position;
-                GetAttackCollider.rotation = _palmRightJoint.rotation;
+                ColliderPositionSizeRotation();
 
                 yield return null;
             }
@@ -231,6 +235,53 @@ namespace TheWeapon
             ResetWeaponCollider();
         }
 
+        /// <summary>
+        /// world position of palm invers in body trnasfom local position
+        /// </summary>
+        private void ColliderPositioning()
+        {
+            Vector3 position;
 
+            position = _transform.position + _transform.InverseTransformPoint(_palmRightJoint.position);
+            position.y = _transform.position.y;
+            GetAttackCollider.position = position;
+        }
+
+        private void ColliderPositionSizeRotation()
+        {
+            Vector3 handlePosition, pikePosition, size;
+            Quaternion rotation;
+
+            // position
+            handlePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetHandle.position);
+            handlePosition.y = _transform.position.y;
+
+            pikePosition = _transform.position + _transform.InverseTransformPoint(_currentRightWeapon.GetPike.position);
+            pikePosition.y = _transform.position.y;
+
+            // size
+            float len = Vector3.Distance(pikePosition, handlePosition);
+           // float height = 
+            size = new Vector3(0.2f, 2, len);
+
+            // rotation
+            rotation = Quaternion.LookRotation(pikePosition - handlePosition);
+
+            // apply
+            GetAttackCollider.position = handlePosition;
+            GetAttackCollider.localScale = size;
+            GetAttackCollider.rotation = rotation;
+        }
+
+        Vector3? _gismopos;
+        private void OnDrawGizmos()
+        {
+            if (_gismopos != null)
+            {
+                Color c = Color.red;
+                Gizmos.color = c;
+                Gizmos.DrawSphere((Vector3)_gismopos, 10f);
+            }
+        }
     }
 }
