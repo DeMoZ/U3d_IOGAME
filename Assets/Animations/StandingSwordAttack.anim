@@ -70960,6 +70960,14 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 0.06666667
+    functionName: ScriptableAttackTest
+    data: 
+    objectReferenceParameter: {fileID: 11400000, guid: b787a0ee9092d58428cbc77bdec6bba5,
+      type: 2}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.56666666
     functionName: Attack
     data: Simple:StartAttack

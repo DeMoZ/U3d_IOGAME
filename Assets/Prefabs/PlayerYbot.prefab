@@ -2177,6 +2177,7 @@ GameObject:
   - component: {fileID: 8796446743214438286}
   - component: {fileID: 3269203418985990227}
   - component: {fileID: -3089276304299892457}
+  - component: {fileID: -7902985500397878004}
   m_Layer: 0
   m_Name: PlayerYbot
   m_TagString: Untagged
@@ -2325,8 +2326,6 @@ MonoBehaviour:
   _colliderHeight: 1.8
   _colliderWidth: 0.2
   _palmRightJoint: {fileID: 3982210572725454978}
-  _attackCollider: {fileID: 5370211433113918137, guid: 80e16636f1e43404085a18bba9924b22,
-    type: 3}
 --- !u!195 &3269203418985990227
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2366,6 +2365,18 @@ MonoBehaviour:
   _speed: 4
   _animatorMoveRight: MoveRight
   _animatorMoveForward: MoveForward
+--- !u!114 &-7902985500397878004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7291607617687877118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8090199797200340aec25943b6129c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7379741306046043495
 GameObject:
   m_ObjectHideFlags: 0
