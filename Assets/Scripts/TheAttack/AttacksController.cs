@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TheGlobal;
 
 namespace TheAttack
 {
@@ -8,40 +9,24 @@ namespace TheAttack
     /// Collects all animations from pointed gameobject and keep in dictionary to forward animations events for asociated action class
     /// </summary>
     [RequireComponent(typeof(Animator))]
-    public class AttacksController : MonoBehaviour, IAttack
+    public class AttacksController : MonoBehaviour
     {
         [Tooltip("The game object which contains all the classes related to animations")]
         [SerializeField] GameObject _animationsFolder;
         /// <summary>
         /// Dictionary of all the attacks for the person
         /// </summary>
-        private Dictionary<string, AbstractAttack> _attacksDict = new Dictionary<string, AbstractAttack>();
+        private Dictionary<GlobalEnums.AnimationNamesIDs, AbstractAttack> _attacksDict = new Dictionary<GlobalEnums.AnimationNamesIDs, AbstractAttack>();
 
         private Animator _animator;
 
-        /// <summary>
-        /// Class should receive events from animations with string names
-        /// </summary>
-        /// <param name="attackStates">The stirng will be splited by \":\" from event string to determine if the event is associated with the class</param>
-        public void Attack(string attackStates)
+
+        public void Attack(AnimationAttackEvent value)
         {
-            string[] parsed = attackStates.Split(':');
-
-            // check if splitted correctly
-            if (parsed.Length < 2 && !string.IsNullOrEmpty(parsed[0]) && !string.IsNullOrEmpty(parsed[1]))
-                throw new System.Exception($"Wrong string value from animation event on {gameObject} should be ' AnimationIdName:PreStart ' ");
-
-            // check if animation id name is in dictionary
-            if (_attacksDict.ContainsKey(parsed[0]))
+            if (_attacksDict.ContainsKey(value.GetAnimationNamesIDs))
             {
-                AttackStates state = AttackStates.None;
-
-                System.Enum.TryParse(parsed[1], true, out state);
-
-                _attacksDict[parsed[0]].Attack(state);
+                _attacksDict[value.GetAnimationNamesIDs].Attack(value.GetAttackState);                
             }
-            else
-                throw new System.Exception($"No animation id name [{parsed[0]}] in dictionary");
         }
 
         private void Awake()

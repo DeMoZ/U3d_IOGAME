@@ -70955,37 +70955,33 @@ AnimationClip:
   m_Events:
   - time: 0
     functionName: Attack
-    data: Simple:PreAttack
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.06666667
-    functionName: ScriptableAttackTest
     data: 
-    objectReferenceParameter: {fileID: 11400000, guid: b787a0ee9092d58428cbc77bdec6bba5,
+    objectReferenceParameter: {fileID: 11400000, guid: 5d62d9784657a994e96e331d0d234f84,
       type: 2}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.56666666
     functionName: Attack
-    data: Simple:StartAttack
-    objectReferenceParameter: {fileID: 0}
+    data: 
+    objectReferenceParameter: {fileID: 11400000, guid: b3f15d276106e254389b603980498df1,
+      type: 2}
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
   - time: 1.0666667
     functionName: Attack
-    data: Simple:EndAttack
-    objectReferenceParameter: {fileID: 0}
+    data: 
+    objectReferenceParameter: {fileID: 11400000, guid: 461afbaf506e7084b9d0bdbbf87e003a,
+      type: 2}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 2.2666667
     functionName: Attack
-    data: Simple:PostAttack
-    objectReferenceParameter: {fileID: 0}
+    data: 
+    objectReferenceParameter: {fileID: 11400000, guid: 9b9ccd83e4d58444986026ffd8914c8a,
+      type: 2}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

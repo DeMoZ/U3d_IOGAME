@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using TheGlobal;
 
 [RequireComponent(typeof(Animator))]
 
 public class ButtonsListenner : NetworkBehaviour
 {
-    [SerializeField] private string _animatorAttackLayer = "Attack";
+    [SerializeField] private GlobalEnums.AnimatorLayers _animatorAttackLayer = GlobalEnums.AnimatorLayers.Attack;
     [SerializeField] private string _animatorAttackTrigger = "Attack";
 
     private Animator _animator;
@@ -17,7 +18,7 @@ public class ButtonsListenner : NetworkBehaviour
     {
         _animator = GetComponent<Animator>();
 
-        _attackLayer = _animator.GetLayerIndex(_animatorAttackLayer);
+        _attackLayer = _animator.GetLayerIndex(_animatorAttackLayer.ToString());
     }
     void Update()
     {

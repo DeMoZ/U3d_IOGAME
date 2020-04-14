@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TheGlobal;
 
 namespace TheAttack
 {
@@ -10,13 +11,13 @@ namespace TheAttack
     abstract public class AbstractAttack : MonoBehaviour, IAttack
     {
         [Tooltip("The unic name for the animation. Can be an animation name")]
-        [SerializeField] protected string _idName;
+        [SerializeField] protected GlobalEnums.AnimationNamesIDs _idName;
+        public GlobalEnums.AnimationNamesIDs GetIdName => _idName;
 
-        [SerializeField] protected string _animatorAttackLayer = "Attack";
+        [SerializeField] protected GlobalEnums.AnimatorLayers _animatorAttackLayer = GlobalEnums.AnimatorLayers.Attack;
 
         private LayerMask _attackLayer;
 
-        public string GetIdName => _idName;
 
         protected Animator _animator;
         public Animator GetAnimator
@@ -33,7 +34,7 @@ namespace TheAttack
 
         private void Start()
         {
-            _attackLayer = GetAnimator.GetLayerIndex(_animatorAttackLayer);
+            _attackLayer = GetAnimator.GetLayerIndex(_animatorAttackLayer.ToString());
         }
 
         protected void SetLayerWeight(int layer, float weight)
@@ -45,20 +46,10 @@ namespace TheAttack
         /// Class should receive events from animations with string names and parce it
         /// </summary>
         /// <param name="attackStates"></param>
-        public void Attack(string attackStates)
-        {
-            string[] parsed = attackStates.Split(':');
-            if (parsed.Length < 2)
-                throw new System.Exception($"Wrong string value from animation event on {gameObject} hould be ' id:PreStart ' ");
+        public void Attack(AnimationAttackEvent value)
+        {           
+            GlobalEnums.AttackStates state = value.GetAttackState;
 
-            // if first parth of string value
-            if (_idName != parsed[0]) return;
-
-            AttackStates state = AttackStates.None;
-
-            System.Enum.TryParse(parsed[1], true, out state);
-
-            // Debug.Log($"enum = {state}");
             Attack(state);
         }
 
@@ -66,23 +57,23 @@ namespace TheAttack
         /// 
         /// </summary>
         /// <param name="state"></param>
-        public void Attack(AttackStates state)
+        public void Attack(GlobalEnums.AttackStates state)
         {
             switch (state)
             {
-                case AttackStates.PreAttack:
+                case GlobalEnums.AttackStates.PreAttack:
                     PreAttack();
                     break;
 
-                case AttackStates.StartAttack:
+                case GlobalEnums.AttackStates.StartAttack:
                     StartAttack();
                     break;
 
-                case AttackStates.EndAttack:
+                case GlobalEnums.AttackStates.EndAttack:
                     EndAttack();
                     break;
 
-                case AttackStates.PostAttack:
+                case GlobalEnums.AttackStates.PostAttack:
                     PostAttack();
                     break;
 

@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TheGlobal;
 
 namespace Test
 {
-    [CreateAssetMenu(fileName = "AnimationEventScriptable", menuName = "ScriptableObjects/AnimationEvents")]
+    [CreateAssetMenu(fileName = "TestAnimationEventScriptable", menuName = "ScriptableObjects/TestAnimationEvents")]
     public class ScriptableAnimationEvent : ScriptableObject
     {
-        public TheAttack.AttackStates AttackStateValue;
+        public GlobalEnums.AttackStates AttackStateValue;
         public int IntValue;
         public float FloatValue;
 

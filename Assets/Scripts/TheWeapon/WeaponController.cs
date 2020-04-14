@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TheAttack;
+using TheGlobal;
 
 namespace TheWeapon
 {
@@ -73,16 +74,9 @@ namespace TheWeapon
             _attackCollider.SubscribeMeOnHitCollider(TestOnWeaponHit);
         }
 
-        public void Attack(string attackStates)
+        public void Attack(AnimationAttackEvent value)
         {
-
-            string[] parsed = attackStates.Split(':');
-            if (parsed.Length < 2)
-                throw new System.Exception($"Wrong string value from animation event on {gameObject} hould be ' id:PreStart ' ");
-
-            AttackStates state = AttackStates.None;
-
-            System.Enum.TryParse(parsed[1], true, out state);
+            GlobalEnums.AttackStates state = value.GetAttackState;
 
             Attack(state);
         }
@@ -91,23 +85,23 @@ namespace TheWeapon
         /// 
         /// </summary>
         /// <param name="state"></param>
-        public void Attack(AttackStates state)
+        public void Attack(GlobalEnums.AttackStates state)
         {
             switch (state)
             {
-                case AttackStates.PreAttack:
+                case GlobalEnums.AttackStates.PreAttack:
                     PreAttack();
                     break;
 
-                case AttackStates.StartAttack:
+                case GlobalEnums.AttackStates.StartAttack:
                     StartAttack();
                     break;
 
-                case AttackStates.EndAttack:
+                case GlobalEnums.AttackStates.EndAttack:
                     EndAttack();
                     break;
 
-                case AttackStates.PostAttack:
+                case GlobalEnums.AttackStates.PostAttack:
                     PostAttack();
                     break;
 
