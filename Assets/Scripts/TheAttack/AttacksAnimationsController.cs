@@ -9,23 +9,25 @@ namespace TheAttack
     /// Collects all animations from pointed gameobject and keep in dictionary to forward animations events for asociated action class
     /// </summary>
     [RequireComponent(typeof(Animator))]
-    public class AttacksController : MonoBehaviour
+    public class AttacksAnimationsController : MonoBehaviour, IAnimationAttackEventListenner
     {
         [Tooltip("The game object which contains all the classes related to animations")]
         [SerializeField] GameObject _animationsFolder;
         /// <summary>
         /// Dictionary of all the attacks for the person
         /// </summary>
-        private Dictionary<GlobalEnums.AnimationNamesIDs, AbstractAttack> _attacksDict = new Dictionary<GlobalEnums.AnimationNamesIDs, AbstractAttack>();
+        private Dictionary<GlobalEnums.AnimationNamesIDs, AttackAnimation> _attacksDict = new Dictionary<GlobalEnums.AnimationNamesIDs, AttackAnimation>();
 
         private Animator _animator;
 
 
-        public void Attack(AnimationAttackEvent value)
+        public void OnAtimationAttack(AnimationAttackEvent value)
         {
+            Debug.Log($"Услышан эвент анимации {value.ToString()}");
+
             if (_attacksDict.ContainsKey(value.GetAnimationNamesIDs))
             {
-                _attacksDict[value.GetAnimationNamesIDs].Attack(value.GetAttackState);                
+                _attacksDict[value.GetAnimationNamesIDs].AttackState(value.GetAttackState);                
             }
         }
 
@@ -41,12 +43,13 @@ namespace TheAttack
         /// </summary>
         private void FindAnimations()
         {
-            AbstractAttack[] _attacks = _animationsFolder.GetComponents<AbstractAttack>();
-
-            foreach (AbstractAttack attack in _attacks)
+            AttackAnimation[] _attacks = _animationsFolder.GetComponents<AttackAnimation>();
+            Debug.Log($"найдено атак на игроке {_attacks.Length}");
+            foreach (AttackAnimation attack in _attacks)
             {
                 if (!_attacksDict.ContainsKey(attack.GetIdName))
                 {
+                    Debug.Log($"добавлена в список");
                     _attacksDict.Add(attack.GetIdName, attack);
 
                     attack.GetAnimator = _animator;

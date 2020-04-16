@@ -11,6 +11,6 @@ namespace TheAttack
         ///  invoke this method with state name
         /// </summary>
         /// <param name="attackStates"> </param>
-        void Attack(GlobalEnums.AttackStates attackState);
+        void AttackState(GlobalEnums.AttackStates attackState);
     }
 }

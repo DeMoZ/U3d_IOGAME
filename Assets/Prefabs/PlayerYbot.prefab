@@ -2295,7 +2295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _animatorAttackLayer: Attack
+  _animatorAttackLayer: 0
   _animatorAttackTrigger: Attack
 --- !u!114 &4799199532652437314
 MonoBehaviour:
@@ -2498,10 +2498,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1274283023268812825}
-  - component: {fileID: 1406157281334344590}
-  - component: {fileID: 629295190468375583}
+  - component: {fileID: 2014934167933637831}
   m_Layer: 0
-  m_Name: MeleAttackComponents
+  m_Name: AttackAnimationComponents
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2521,26 +2520,7 @@ Transform:
   m_Father: {fileID: 6011082459234928621}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1406157281334344590
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8308988262192935151}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 2
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &629295190468375583
+--- !u!114 &2014934167933637831
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2549,11 +2529,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8308988262192935151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eb2edf42de44d04ab16827f0df1bd27, type: 3}
+  m_Script: {fileID: 11500000, guid: bd6e7ae6427887847a799eeb92a73536, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idName: Simple
-  _animatorAttackLayer: Attack
+  _idName: 0
+  _animatorAttackLayer: 1
 --- !u!1 &8597723161357171560
 GameObject:
   m_ObjectHideFlags: 0

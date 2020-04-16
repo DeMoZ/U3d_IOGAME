@@ -8,7 +8,7 @@ namespace TheAttack
     /// <summary>
     /// General state machine for attack animation end behaviour
     /// </summary>
-    abstract public class AbstractAttack : MonoBehaviour, IAttack
+     public class AttackAnimation : MonoBehaviour, IAttack
     {
         [Tooltip("The unic name for the animation. Can be an animation name")]
         [SerializeField] protected GlobalEnums.AnimationNamesIDs _idName;
@@ -50,14 +50,14 @@ namespace TheAttack
         {           
             GlobalEnums.AttackStates state = value.GetAttackState;
 
-            Attack(state);
+            AttackState(state);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="state"></param>
-        public void Attack(GlobalEnums.AttackStates state)
+        public void AttackState(GlobalEnums.AttackStates state)
         {
             switch (state)
             {

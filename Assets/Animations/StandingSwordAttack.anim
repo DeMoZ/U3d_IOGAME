@@ -70954,7 +70954,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: Attack
+    functionName: OnAtimationAttack
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 5d62d9784657a994e96e331d0d234f84,
       type: 2}
@@ -70962,7 +70962,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.56666666
-    functionName: Attack
+    functionName: OnAtimationAttack
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: b3f15d276106e254389b603980498df1,
       type: 2}
@@ -70970,7 +70970,7 @@ AnimationClip:
     intParameter: 1
     messageOptions: 0
   - time: 1.0666667
-    functionName: Attack
+    functionName: OnAtimationAttack
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 461afbaf506e7084b9d0bdbbf87e003a,
       type: 2}
@@ -70978,7 +70978,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 2.2666667
-    functionName: Attack
+    functionName: OnAtimationAttack
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 9b9ccd83e4d58444986026ffd8914c8a,
       type: 2}

@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TheAttack;
+using TheWeapon;
 using TheGlobal;
 
-namespace TheWeapon
+namespace TheAttack
 {
     /// <summary>
     /// keeps information about current weapon. Has link to weapon joint transrorm in the body.
     /// Knows weapon Collider, joints, etc.
     /// </summary>
-    public class WeaponController : MonoBehaviour, IAttack
+    public class AttackColliderController : MonoBehaviour, IAttack, IAnimationAttackEventListenner
     {
         [Tooltip("collider height - minimal height")]
         [SerializeField] private float _colliderHeight = 1.8f;
@@ -20,7 +20,7 @@ namespace TheWeapon
         [Tooltip("palm right joint in the character body")]
         [SerializeField] private Transform _palmRightJoint;
 
-        /// <summary>
+        /// <summary> 
         /// attack collider script on attack collider object
         /// </summary>
         private AttackCollider _attackCollider;
@@ -66,7 +66,7 @@ namespace TheWeapon
         private void CreateWeaponCollider()
         {
             GameObject go = new GameObject();
-            go.name = "WeaponCollider";
+            go.name = "AttackCollider";
             go.transform.parent = transform;
 
             _attackCollider = go.AddComponent<AttackCollider>();
@@ -74,18 +74,18 @@ namespace TheWeapon
             _attackCollider.SubscribeMeOnHitCollider(TestOnWeaponHit);
         }
 
-        public void Attack(AnimationAttackEvent value)
+        public void OnAtimationAttack(AnimationAttackEvent value)
         {
             GlobalEnums.AttackStates state = value.GetAttackState;
 
-            Attack(state);
+            AttackState(state);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="state"></param>
-        public void Attack(GlobalEnums.AttackStates state)
+        public void AttackState(GlobalEnums.AttackStates state)
         {
             switch (state)
             {
