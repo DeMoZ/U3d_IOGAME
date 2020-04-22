@@ -21,7 +21,7 @@ namespace TheAttack
         private Animator _animator;
 
 
-        public void OnAtimationAttack(AnimationAttackEvent value)
+        public void OnAnimationAttack(AnimationAttackEvent value)
         {
             Debug.Log($"Услышан эвент анимации {value.ToString()}");
 

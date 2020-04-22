@@ -10,6 +10,6 @@ namespace TheAttack
     /// </summary>
     public interface IAnimationAttackEventListenner
     {
-        void OnAtimationAttack(AnimationAttackEvent value);
+        void OnAnimationAttack(AnimationAttackEvent value);
     }
 }

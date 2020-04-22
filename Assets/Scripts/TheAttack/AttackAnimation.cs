@@ -37,10 +37,10 @@ namespace TheAttack
             _attackLayer = GetAnimator.GetLayerIndex(_animatorAttackLayer.ToString());
         }
 
-        protected void SetLayerWeight(int layer, float weight)
-        {
-            GetAnimator.SetLayerWeight(layer, weight);
-        }
+        //protected void SetLayerWeight(int layer, float weight)
+        //{
+        //    GetAnimator.SetLayerWeight(layer, weight);
+        //}
 
         /// <summary>
         /// Class should receive events from animations with string names and parce it
@@ -65,15 +65,15 @@ namespace TheAttack
                     PreAttack();
                     break;
 
-                case GlobalEnums.AttackStates.StartAttack:
+                case GlobalEnums.AttackStates.Attack:
                     StartAttack();
                     break;
 
-                case GlobalEnums.AttackStates.EndAttack:
+                case GlobalEnums.AttackStates.Hold:
                     EndAttack();
                     break;
 
-                case GlobalEnums.AttackStates.PostAttack:
+                case GlobalEnums.AttackStates.Back:
                     PostAttack();
                     break;
 
@@ -88,7 +88,7 @@ namespace TheAttack
         /// </summary>
         protected virtual void PreAttack()
         {
-            SetLayerWeight(_attackLayer, 1);
+           // SetLayerWeight(_attackLayer, 1);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace TheAttack
         /// </summary>
         protected virtual void PostAttack()
         {
-            SetLayerWeight(_attackLayer, 0.001f);
+           // SetLayerWeight(_attackLayer, 0.001f);
 
         }
 

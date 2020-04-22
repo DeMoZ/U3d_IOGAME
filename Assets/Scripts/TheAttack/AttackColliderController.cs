@@ -74,7 +74,7 @@ namespace TheAttack
             _attackCollider.SubscribeMeOnHitCollider(TestOnWeaponHit);
         }
 
-        public void OnAtimationAttack(AnimationAttackEvent value)
+        public void OnAnimationAttack(AnimationAttackEvent value)
         {
             GlobalEnums.AttackStates state = value.GetAttackState;
 
@@ -93,15 +93,15 @@ namespace TheAttack
                     PreAttack();
                     break;
 
-                case GlobalEnums.AttackStates.StartAttack:
+                case GlobalEnums.AttackStates.Attack:
                     StartAttack();
                     break;
 
-                case GlobalEnums.AttackStates.EndAttack:
+                case GlobalEnums.AttackStates.Hold:
                     EndAttack();
                     break;
 
-                case GlobalEnums.AttackStates.PostAttack:
+                case GlobalEnums.AttackStates.Back:
                     PostAttack();
                     break;
 

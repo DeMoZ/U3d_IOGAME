@@ -2172,11 +2172,11 @@ GameObject:
   - component: {fileID: -4213463149342627394}
   - component: {fileID: -6757113364843090842}
   - component: {fileID: 5071552695031383759}
-  - component: {fileID: 4422965058181406645}
   - component: {fileID: 4799199532652437314}
   - component: {fileID: 8796446743214438286}
   - component: {fileID: 3269203418985990227}
   - component: {fileID: -3089276304299892457}
+  - component: {fileID: -4909727475119933336}
   m_Layer: 0
   m_Name: PlayerYbot
   m_TagString: Untagged
@@ -2281,22 +2281,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ea9a15d3d31e943b0535490ce69300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4422965058181406645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7291607617687877118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 292d80a88c8233e41a230b045d20b4dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  _animatorAttackLayer: 0
-  _animatorAttackTrigger: Attack
 --- !u!114 &4799199532652437314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2364,6 +2348,21 @@ MonoBehaviour:
   _speed: 4
   _animatorMoveRight: MoveRight
   _animatorMoveForward: MoveForward
+--- !u!114 &-4909727475119933336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7291607617687877118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7884109d09dc4d94d9ea7122d23a6338, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _animatorAttackTrigger: 0
 --- !u!1 &7379741306046043495
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,14 +28,34 @@ namespace TheGlobal
         /// </summary>
         public enum AttackStates
         {
-            None = 0,       // state with no activity or state wasnt parsed
+            None = 0,       // state with no activity
 
             PreAttack,      // animation started and if required some pre effect/code before damage trigger appear
-            StartAttack,    // damage trigger to be appeared
-            EndAttack,      // damage trigger to be dissappear
-            PostAttack,     // animation end and if required some pos effect/code required
+            Attack,    // damage trigger to be appeared
+            Hold,      // damage trigger to dissappear, waiting to continue attack queue
+            Back,     // animation end and if required some pos effect/code required
+            End,
 
             BrokeAttack,    // if attack has been broke
         };
+
+        /// <summary>
+        /// all posible attac states
+        /// </summary>
+        public enum QueueStates
+        {
+            NotReady = 0,       // state with no activity or state wasnt parsed
+            Attacking,          // performing attack
+            Ready               // Ready to listen button for attack
+          
+        };
+
+        /// <summary>
+        /// Triggers for animator
+        /// </summary>
+        public enum AnimatorTriggers
+        {
+            Attack,
+        }
     }
 }
