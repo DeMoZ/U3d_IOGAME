@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35c960ce1063dcf419aac8a43be4697f, type: 3}
-  m_Name: AnimEvent_Simple_PreStart
+  m_Name: AnimEvent_Simple_Hold
   m_EditorClassIdentifier: 
   _animationNamesIDs: 0
   _animatorLayer: 1
-  _attackState: 1
+  _attackState: 3

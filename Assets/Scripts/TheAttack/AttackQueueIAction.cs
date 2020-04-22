@@ -11,10 +11,12 @@ namespace TheAttack
     /// the scripts listens animation attack state and also listens attack button press.
     /// the attack trigger only alayed if button pressed during right time and state
     /// </summary>
-    public class AttackQueue : NetworkBehaviour, IAnimationAttackEventListenner, IAttack
+    [RequireComponent(typeof(ActionStateMachine))]
+    public class AttackQueueIAction : NetworkBehaviour, IAnimationAttackEventListenner, IAttack, IAction
     {
         [SerializeField] private GlobalEnums.AnimatorTriggers _animatorAttackTrigger = GlobalEnums.AnimatorTriggers.Attack;
 
+        private ActionStateMachine _actionStateMachine;
         private Animator _animator;
         private Animator GetAnimator
         {
@@ -54,6 +56,8 @@ namespace TheAttack
         /// <param name="state"></param>
         public void AttackState(GlobalEnums.AttackStates state)
         {
+            _currentAttackState = state;
+
             switch (state)
             {
                 case GlobalEnums.AttackStates.Warm:
@@ -138,6 +142,11 @@ namespace TheAttack
             _stopAfterHit = false;
         }
 
+        void Awake()
+        {
+            _actionStateMachine = GetComponent<ActionStateMachine>();
+        }
+
         private void Start()
         {
             Initialize();
@@ -147,6 +156,8 @@ namespace TheAttack
         void Update()
         {
             if (!isLocalPlayer) return;
+
+            if (!_actionStateMachine.AllowAction(this)) return;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -197,6 +208,30 @@ namespace TheAttack
         void RpcAttack()
         {
             GetAnimator.SetTrigger(_animatorAttackTrigger.ToString());
+        }
+
+        public bool IsInAction()
+        {
+            bool rezult = false;
+            // some state
+            switch (GetCurrentAttackState)
+            {
+                case GlobalEnums.AttackStates.Warm:
+                    rezult = true;
+                    break;
+
+                case GlobalEnums.AttackStates.Hit:
+                    rezult = true;
+                    break;
+
+                case GlobalEnums.AttackStates.Hold:
+                    rezult = true;
+                    break;
+            }
+
+            Debug.Log($"{this} bussy = {rezult}");
+
+            return rezult;
         }
     }
 }

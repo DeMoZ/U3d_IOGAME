@@ -2174,9 +2174,10 @@ GameObject:
   - component: {fileID: 5071552695031383759}
   - component: {fileID: 4799199532652437314}
   - component: {fileID: 8796446743214438286}
-  - component: {fileID: 3269203418985990227}
-  - component: {fileID: -3089276304299892457}
-  - component: {fileID: -4909727475119933336}
+  - component: {fileID: 2768452607632536175}
+  - component: {fileID: 3484074445539679458}
+  - component: {fileID: -8197972973803115793}
+  - component: {fileID: 1845559705136988405}
   m_Layer: 0
   m_Name: PlayerYbot
   m_TagString: Untagged
@@ -2309,29 +2310,7 @@ MonoBehaviour:
   _colliderHeight: 1.8
   _colliderWidth: 0.2
   _palmRightJoint: {fileID: 3982210572725454978}
---- !u!195 &3269203418985990227
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7291607617687877118}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!114 &-3089276304299892457
+--- !u!114 &2768452607632536175
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2340,15 +2319,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7291607617687877118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9b502e86099c1d45bba5833e16edd54, type: 3}
+  m_Script: {fileID: 11500000, guid: 50051b6d8280ee04db6a855bc0932ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  _speed: 4
-  _animatorMoveRight: MoveRight
-  _animatorMoveForward: MoveForward
---- !u!114 &-4909727475119933336
+--- !u!114 &3484074445539679458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2357,12 +2331,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 7291607617687877118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7884109d09dc4d94d9ea7122d23a6338, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b94e53e96b1415449edd645396fdebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
   _animatorAttackTrigger: 0
+--- !u!143 &-8197972973803115793
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7291607617687877118}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &1845559705136988405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7291607617687877118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2311ee5229af8ac41bba100f6df7f722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _speed: 200
+  _animatorMoveRight: MoveRight
+  _animatorMoveForward: MoveForward
 --- !u!1 &7379741306046043495
 GameObject:
   m_ObjectHideFlags: 0

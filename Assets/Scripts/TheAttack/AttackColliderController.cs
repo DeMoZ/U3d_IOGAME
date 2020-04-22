@@ -89,11 +89,11 @@ namespace TheAttack
         {
             switch (state)
             {
-                case GlobalEnums.AttackStates.PreAttack:
+                case GlobalEnums.AttackStates.Warm:
                     PreAttack();
                     break;
 
-                case GlobalEnums.AttackStates.Attack:
+                case GlobalEnums.AttackStates.Hit:
                     StartAttack();
                     break;
 
@@ -101,7 +101,7 @@ namespace TheAttack
                     EndAttack();
                     break;
 
-                case GlobalEnums.AttackStates.Back:
+                case GlobalEnums.AttackStates.Cold:
                     PostAttack();
                     break;
 

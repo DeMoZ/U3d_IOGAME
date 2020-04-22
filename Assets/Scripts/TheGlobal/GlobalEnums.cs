@@ -28,13 +28,13 @@ namespace TheGlobal
         /// </summary>
         public enum AttackStates
         {
-            None = 0,       // state with no activity
+            None = 0,   // state with no activity
 
-            PreAttack,      // animation started and if required some pre effect/code before damage trigger appear
-            Attack,    // damage trigger to be appeared
-            Hold,      // damage trigger to dissappear, waiting to continue attack queue
-            Back,     // animation end and if required some pos effect/code required
-            End,
+            Warm,       // animation started and if required some pre effect/code before damage trigger appear
+            Hit,        // damage trigger to be appeared
+            Hold,       // damage trigger to dissappear, waiting to continue attack queue
+            Cold,       // animation end and if required some pos effect/code required
+            End,        // total end of the animation
 
             BrokeAttack,    // if attack has been broke
         };
