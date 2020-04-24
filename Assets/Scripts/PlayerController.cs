@@ -14,6 +14,8 @@ public class PlayerController : NetworkBehaviour
     IInput _input;
     IMove _move;
 
+    // cashed velocity prom previous frame;
+    private Vector3 velocityPrevious = Vector3.zero;
     private void Start()
     {
         Initialize();
@@ -27,6 +29,8 @@ public class PlayerController : NetworkBehaviour
     {
         _input = GetComponent<IInput>();
         _move = GetComponent<IMove>();
+
+        velocityPrevious = Vector3.zero;
 
 #if INSTALL_CAMERA
         if (!_playerCameraPrefab)
@@ -52,8 +56,11 @@ public class PlayerController : NetworkBehaviour
 
         Vector3 velocity = VelocityFromInput(_input.GetInput());
 
-        _move.Move(velocity);
-
+        if (velocity != velocityPrevious)
+        {
+            _move.Move(velocity);
+            velocityPrevious = velocity;
+        }
     }
 
     private Vector3 VelocityFromInput(Vector3 input)
