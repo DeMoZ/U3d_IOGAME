@@ -36,7 +36,7 @@ namespace TheMove
         {
             if (!_actionStateMachine.AllowAction(this)) return;
 
-            Debug.Log("Going to move");
+            Debug.Log($"Going to move, direction {direction}") ;
             // _characterController.Move(direction * _speed * Time.deltaTime);
 
             // Vector3 inverseTransform = _transform.InverseTransformDirection(_characterController.velocity);

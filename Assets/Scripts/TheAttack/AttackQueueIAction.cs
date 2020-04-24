@@ -34,9 +34,10 @@ namespace TheAttack
 
         private GlobalEnums.QueueStates _currentQueueState = GlobalEnums.QueueStates.Ready;
 
+        private bool _stopAfterHit = false;
+
         private bool _triggerReadynes = false;
 
-        private bool _stopAfterHit = false;
         /// <summary>
         /// true, when attack can be send to animator
         /// </summary>
