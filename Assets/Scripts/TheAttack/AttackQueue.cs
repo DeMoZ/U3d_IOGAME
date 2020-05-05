@@ -47,13 +47,14 @@ namespace TheAttack
             AttackState(state);
         }
 
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="state"></param>
         public void AttackState(GlobalEnums.AttackStates state)
         {
+            Debug.Log($"State received {state} at {this}");
+
             switch (state)
             {
                 case GlobalEnums.AttackStates.Warm:
