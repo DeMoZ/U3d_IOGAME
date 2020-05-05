@@ -61,7 +61,7 @@ namespace TheAttack
             CreateWeaponCollider();
 
             if (!_palmRightJoint)
-                throw new System.Exception($"PalmRightJoint not set in WeaponController for{gameObject}");            
+                throw new System.Exception($"PalmRightJoint not set in WeaponController for{gameObject}");
         }
         private void CreateWeaponCollider()
         {
@@ -70,7 +70,7 @@ namespace TheAttack
             go.transform.parent = transform;
 
             _attackCollider = go.AddComponent<AttackCollider>();
-            _attackCollider.Initialize(_colliderHeight, _colliderWidth);
+            _attackCollider.Initialize(_colliderHeight, _colliderWidth, name);
             _attackCollider.SubscribeMeOnHitCollider(TestOnWeaponHit);
         }
 
@@ -147,7 +147,7 @@ namespace TheAttack
         /// wrong method name is set in animation event
         /// </summary>
         protected void None() { }
-              
+
         private void WeaponCollider()
         {
             if (_colliderRoutine != null)
@@ -158,7 +158,7 @@ namespace TheAttack
 
             _colliderRoutine = StartCoroutine(WeaponColliderPositioning());
         }
-       
+
         private IEnumerator WeaponColliderPositioning()
         {
             _triggerActive = true;
@@ -178,7 +178,7 @@ namespace TheAttack
 
             GetAttackCollider.SetReset();
         }
-               
+
         //private void Update()
         //{
         //    if (_triggerActive)

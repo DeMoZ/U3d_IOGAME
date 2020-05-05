@@ -6,7 +6,7 @@ using TheGlobal;
 namespace TheAttack
 {
     /// <summary>
-    /// General state machine for attack animation end behaviour
+    /// Depricated: General state machine for attack animation end behaviour
     /// </summary>
      public class AttackAnimation : MonoBehaviour, IAttack
     {

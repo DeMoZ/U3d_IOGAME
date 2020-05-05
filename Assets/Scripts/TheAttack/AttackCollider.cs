@@ -13,7 +13,8 @@ namespace TheAttack
         /// collider height - minimal height
         /// </summary>
         private float _colliderHeight;
-        public float GetColliderHeight { 
+        public float GetColliderHeight
+        {
             get { return _colliderHeight; }
             set { _colliderHeight = value; }
         }
@@ -21,7 +22,7 @@ namespace TheAttack
         /// <summary>
         /// collider width - constant
         /// </summary>
-        private float _colliderWidth ;
+        private float _colliderWidth;
         public float GetColliderWidth
         {
             get { return _colliderWidth; }
@@ -64,10 +65,21 @@ namespace TheAttack
             }
         }
 
-        public void Initialize(float colliderHeight,float colliderWidth)
+        /// <summary>
+        /// character game object name. To awoid colliding  with its self
+        /// </summary>
+        private string _myName;
+        public string GetMyName
+        {
+            set { _myName = value; }
+            get { return _myName; }
+        }
+
+        public void Initialize(float colliderHeight, float colliderWidth, string name)
         {
             GetColliderHeight = colliderHeight;
             GetColliderWidth = colliderWidth;
+            GetMyName = name;
         }
 
         public void SubscribeMeOnHitCollider(HitTriggered callback)
@@ -78,7 +90,10 @@ namespace TheAttack
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log($"{this} OnTriggerEnter other= {other.name}");
+            if (GetMyName == other.name) return;
+
+            Debug.Log($"!!! {this} OnTriggerEnter other= {other.name}");
+
             OnHitTriggered?.Invoke(other);
         }
 
@@ -95,7 +110,7 @@ namespace TheAttack
         /// <summary>
         /// move and rotate collider on scene acording anamated weapon
         /// </summary>
-        public void SetCollider(Transform parent,Transform closePoint,Transform farPoint)
+        public void SetCollider(Transform parent, Transform closePoint, Transform farPoint)
         {
             Vector3 handlePosition, pikePosition;
             Vector3 size = new Vector3(_colliderWidth, _colliderHeight, 1);
