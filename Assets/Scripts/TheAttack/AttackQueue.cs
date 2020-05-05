@@ -42,6 +42,8 @@ namespace TheAttack
 
         public void OnAnimationAttack(AnimationAttackEvent value)
         {
+            Debug.Log($"{this} OnAnimationAttack");
+
             GlobalEnums.AttackStates state = value.GetAttackState;
 
             AttackState(state);
