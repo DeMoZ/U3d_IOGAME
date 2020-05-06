@@ -14,14 +14,17 @@ namespace TheInput
             return _direction;
         }
 
+        private void Awake()
+        {
+            _pInput = GetComponent<PlayerInput>();
+        }
+
         // Update is called once per frame
         void Update()
         {
-
-
             //direction.x = Input.GetAxis("Horizontal");
             //direction.y = Input.GetAxis("Vertical");
-
+            _pInput.
             
 
             _direction = Vector3.ClampMagnitude(_direction, 1);
