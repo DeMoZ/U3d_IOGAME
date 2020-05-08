@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using TheGlobal;
+/// <summary>
+/// Depricated
+/// </summary>
 
 [RequireComponent(typeof(Animator))]
 

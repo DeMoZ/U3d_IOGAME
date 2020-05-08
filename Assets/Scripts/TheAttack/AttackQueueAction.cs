@@ -175,10 +175,11 @@ namespace TheAttack
 
             if (!_actionStateMachine.AllowAction(this)) return;
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                CmdAttack();
-            }
+            // !!Depricated!!
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    CmdAttack();
+            //}
         }
 
         [Command]
