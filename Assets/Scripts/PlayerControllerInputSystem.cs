@@ -35,7 +35,7 @@ public class PlayerControllerInputSystem : NetworkBehaviour
     private void Awake()
     {
         _inputActions = new TheInputActions();
-        _inputActions.PlayerControls.AttackUp.performed += ctrl => AttackUp();
+        _inputActions.PlayerControls.AttackUp.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackUp);
         _inputActions.PlayerControls.AttackDn.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackDn);
         _inputActions.PlayerControls.AttackLt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackLt);
         _inputActions.PlayerControls.AttackRt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackRt);
@@ -54,56 +54,7 @@ public class PlayerControllerInputSystem : NetworkBehaviour
         _cameraT = Camera.main.transform;
 #endif
     }
-    private void AttackUp()
-    {
-        Debug.Log("Test");
-    }
-    //--------------------------------------------------------
-    /*
-    // Attack Up Down Left Right
 
-    public delegate void DelegateAttack();
-    // Attack UP
-    public event DelegateAttack OnAttackUp;
-    private void AttackUp()
-    {
-        OnAttackUp?.Invoke();
-    }
-    public void SubscribeMeOnAttackUp(DelegateAttack callback)
-    {
-        OnAttackUp += callback;
-    }
-    // Attack Down
-    public event DelegateAttack OnAttackDn;
-    private void AttackDn()
-    {
-        OnAttackDn?.Invoke();
-    }
-    public void SubscribeMeOnAttackDn(DelegateAttack callback)
-    {
-        OnAttackDn += callback;
-    }
-    // Attack Left
-    public event DelegateAttack OnAttackLt;
-    private void AttackLt()
-    {
-        OnAttackLt?.Invoke();
-    }
-    public void SubscribeMeOnAttackLt(DelegateAttack callback)
-    {
-        OnAttackLt += callback;
-    }
-    // Attack Right
-    public event DelegateAttack OnAttackRt;
-    private void AttackRt()
-    {
-        OnAttackRt?.Invoke();
-    }
-    public void SubscribeMeOnAttackRt(DelegateAttack callback)
-    {
-        OnAttackRt += callback;
-    }
-    */
     //----------------------------------------------------------
 
     /// <summary>
@@ -128,15 +79,18 @@ public class PlayerControllerInputSystem : NetworkBehaviour
         {
             m_events.Add((NoParamEvents)e, new UnityEvent());
         }
+        Debug.Log("Event dictionary filled");
     }
 
+    /// <summary>
+    /// Subscribe to the event from events enum (no parameters)
+    /// </summary>
+    /// <param name="noParamEvents"></param>
+    /// <param name="callback"></param>
     public void SubscribeMeOnNoParamEvents(NoParamEvents noParamEvents, UnityAction callback)
     {
         if (m_events.Count == 0)
-        {
             FillUpDictionary();
-            Debug.Log("Event dictionary filled");
-        }
 
         UnityEvent even;
         m_events.TryGetValue(noParamEvents, out even);
@@ -144,15 +98,16 @@ public class PlayerControllerInputSystem : NetworkBehaviour
         even?.AddListener(callback);
     }
 
+    /// <summary>
+    /// Invoke event by enum name
+    /// </summary>
+    /// <param name="noParamEvents"></param>
     public void InvokeNoParamEvents(NoParamEvents noParamEvents)
-    {
-        Debug.Log($"1) Invoked {noParamEvents.ToString()}");
+    {    
         UnityEvent even;
         m_events.TryGetValue(noParamEvents, out even);
 
         even?.Invoke();
-
-        Debug.Log($"2) Invoked {noParamEvents.ToString()}");
     }
 
 

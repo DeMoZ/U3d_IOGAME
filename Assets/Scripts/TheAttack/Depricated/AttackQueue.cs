@@ -8,7 +8,7 @@ using Mirror;
 namespace TheAttack
 {
     /// <summary>
-    /// the scripts listens animation attack state and also listens attack button press.
+    /// Depricated . The scripts listens animation attack state and also listens attack button press.
     /// the attack trigger only alayed if button pressed during right time and state
     /// </summary>
     public class AttackQueue : NetworkBehaviour, IAnimationAttackEventListenner, IAttack

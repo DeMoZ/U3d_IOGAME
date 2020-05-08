@@ -39,6 +39,18 @@ namespace TheAttack
 
         private bool _triggerReadynes = false;
 
+        private PlayerControllerInputSystem _playerControllerInputSystem;
+        private PlayerControllerInputSystem GetPlayerControllerInputSystem
+        {
+            get
+            {
+                if (!_playerControllerInputSystem)
+                    _playerControllerInputSystem = GetComponent<PlayerControllerInputSystem>();
+
+                return _playerControllerInputSystem;
+            }
+        }
+            
         /// <summary>
         /// true, when attack can be send to animator
         /// </summary>
@@ -165,6 +177,12 @@ namespace TheAttack
 
             _triggerReadynes = true;
             _ignoreAttack = false;
+
+            // Subscribe to Input events
+            GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackUp ,CmdAttackUp);
+            // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackDn, CmdAttackDn);
+            // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackLt, CmdAttackLt);
+            // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackRt, CmdAttackRt);
         }
 
 
@@ -173,18 +191,14 @@ namespace TheAttack
         {
             if (!isLocalPlayer) return;
 
-            if (!_actionStateMachine.AllowAction(this)) return;
-
-            // !!Depricated!!
-            //if (Input.GetMouseButtonDown(0))
-            //{
-            //    CmdAttack();
-            //}
+            
         }
 
         [Command]
-        void CmdAttack()
+        void CmdAttackUp()
         {
+            if (!_actionStateMachine.AllowAction(this)) return;
+
             Debug.Log($"GetCurrentAttackState = {GetCurrentAttackState}, _ignoreAttack = {_ignoreAttack} ");
 
             switch (GetCurrentAttackState)
