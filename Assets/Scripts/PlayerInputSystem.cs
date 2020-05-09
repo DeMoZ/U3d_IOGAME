@@ -12,7 +12,7 @@ using UnityEngine.Events;
 /// <summary>
 ///  Input based on Imput system
 /// </summary>
-public class PlayerControllerInputSystem : NetworkBehaviour
+public class PlayerInputSystem : NetworkBehaviour
 {
     public delegate void MoveEvent(Vector2 vector2);
     /// <summary>
@@ -200,5 +200,4 @@ public class PlayerControllerInputSystem : NetworkBehaviour
     {
         _inputActions.Disable();
     }
-
 }

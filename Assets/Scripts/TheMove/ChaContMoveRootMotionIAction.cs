@@ -22,13 +22,13 @@ namespace TheMove
         private Animator _animator;
         private Transform _transform;
 
-        private PlayerControllerInputSystem _playerControllerInputSystem;
-        private PlayerControllerInputSystem GetPlayerControllerInputSystem
+        private PlayerInputSystem _playerControllerInputSystem;
+        private PlayerInputSystem GetPlayerControllerInputSystem
         {
             get
             {
                 if (!_playerControllerInputSystem)
-                    _playerControllerInputSystem = GetComponent<PlayerControllerInputSystem>();
+                    _playerControllerInputSystem = GetComponent<PlayerInputSystem>();
 
                 return _playerControllerInputSystem;
             }
@@ -49,7 +49,7 @@ namespace TheMove
         /// intermediate method to translate v2 to v3
         /// </summary>
         /// <param name="direction"></param>
-        private void Move(Vector2 direction)
+        public void Move(Vector2 direction)
         {
             Move(new Vector3(direction.x, 0, direction.y));
         }
@@ -88,6 +88,13 @@ namespace TheMove
 
             return false;
         }
+
+
+
+        //void IMove.Move(Vector2 direction)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
 }
 

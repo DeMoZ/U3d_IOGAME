@@ -50,5 +50,10 @@ namespace TheMove
             _animator.SetFloat(_animatorMoveForward, direction.z);
             _animator.SetFloat(_animatorMoveRight, direction.x);
         }
+
+        public void Move(Vector2 direction)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

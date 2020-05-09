@@ -39,18 +39,6 @@ namespace TheAttack
 
         private bool _triggerReadynes = false;
 
-        private PlayerControllerInputSystem _playerControllerInputSystem;
-        private PlayerControllerInputSystem GetPlayerControllerInputSystem
-        {
-            get
-            {
-                if (!_playerControllerInputSystem)
-                    _playerControllerInputSystem = GetComponent<PlayerControllerInputSystem>();
-
-                return _playerControllerInputSystem;
-            }
-        }
-
         /// <summary>
         /// true, when attack can be send to animator
         /// </summary>
@@ -63,7 +51,6 @@ namespace TheAttack
 
             AttackState(state);
         }
-
 
         /// <summary>
         /// 
@@ -97,22 +84,13 @@ namespace TheAttack
 
             _triggerReadynes = true;
             _ignoreAttack = false;
-
-            // Subscribe to Input events
-            GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackUp, CmdAttackUp);
-            // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackDn, CmdAttackDn);
-            // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackLt, CmdAttackLt);
-            // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackRt, CmdAttackRt);
         }
 
-
-        // queue
-        void Update()
-        {
-            //  if (!isLocalPlayer) return;
-
-
-        }
+        // thise methors subscribed to the events from outside of the class
+        public void AttackUp() => CmdAttackUp();
+        public void AttackDn() => CmdAttackDn();
+        public void AttackLt() => CmdAttackLt();
+        public void AttackRt() => CmdAttackRt();
 
         [Command]
         void CmdAttackUp()
@@ -146,11 +124,18 @@ namespace TheAttack
 
                     break;
             }
-
-            // }
-
-
         }
+
+        [Command]
+        void CmdAttackDn() { }
+
+        [Command]
+        void CmdAttackLt() { }
+
+        [Command]
+        void CmdAttackRt() { }
+
+
         [ClientRpc]
         void RpcAttack()
         {

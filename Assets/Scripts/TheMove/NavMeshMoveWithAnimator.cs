@@ -56,6 +56,11 @@ namespace TheMove
             _animator.SetFloat(_animatorMoveRight, direction.x);
         }
 
+        public void Move(Vector2 direction)
+        {
+            throw new System.NotImplementedException();
+        }
+
         //private Vector3 VelocityRelatedTransform(Transform objectTransform, Vector3 vector)
         //{
         //    Vector3 velocity = vector;
