@@ -15,7 +15,7 @@ namespace TheAttack
     [RequireComponent(typeof(ActionStateMachine))]
     public class AttackQueueAction : NetworkBehaviour, IAnimationAttackEventListenner, IAttack, IAction
     {
-        [SerializeField] private GlobalEnums.AnimatorTriggers _animatorAttackTrigger = GlobalEnums.AnimatorTriggers.Attack;
+        //[SerializeField] private GlobalEnums.AnimatorTriggers _animatorAttackTrigger = GlobalEnums.AnimatorTriggers.Attack;
 
         private ActionStateMachine _actionStateMachine;
         private Animator _animator;
@@ -50,7 +50,7 @@ namespace TheAttack
                 return _playerControllerInputSystem;
             }
         }
-            
+
         /// <summary>
         /// true, when attack can be send to animator
         /// </summary>
@@ -79,87 +79,7 @@ namespace TheAttack
                     Debug.Log($"Attack end, ignore attack = {_ignoreAttack}");
                     break;
             }
-
-            /*
-            switch (state)
-            {
-                case GlobalEnums.AttackStates.Warm:
-                    PreAttack();
-                    break;
-
-                case GlobalEnums.AttackStates.Hit:
-                    Attack();
-                    break;
-
-                case GlobalEnums.AttackStates.Hold:
-                    Hold();
-                    break;
-
-                case GlobalEnums.AttackStates.Cold:
-                    EndAttack();
-                    break;
-
-                case GlobalEnums.AttackStates.End:
-                    EndAttack();
-                    break;
-
-
-                default:        // IAttack.AttackStates.None
-                    None();
-                    break;
-            }
-            */
         }
-
-        /*
-        /// <summary>
-        /// no state or idle. Attack allowed
-        /// </summary>
-        private void None()
-        {
-            // throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// the weapon is going to position for start swing
-        /// </summary>
-        private void PreAttack()
-        {
-            // throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// actual attack is performing
-        /// </summary>
-        private void Attack()
-        {
-            // throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// the attack has finished
-        /// </summary>
-        private void Hold()
-        {
-            //if (_stopAfterHit)
-            //{
-            //    _stopAfterHit = false;
-
-            //    // send trigger for interrupt queue;
-            //    // TODO
-            //}
-        }
-
-        /// <summary>
-        /// the weapon is going to idle position (attack not allowed)
-        /// </summary>
-        private void EndAttack()
-        {
-            // throw new NotImplementedException();
-        }
-
-        */
-
 
         void Awake()
         {
@@ -179,7 +99,7 @@ namespace TheAttack
             _ignoreAttack = false;
 
             // Subscribe to Input events
-            GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackUp ,CmdAttackUp);
+            GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackUp, CmdAttackUp);
             // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackDn, CmdAttackDn);
             // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackLt, CmdAttackLt);
             // GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerControllerInputSystem.NoParamEvents.AttackRt, CmdAttackRt);
@@ -189,9 +109,9 @@ namespace TheAttack
         // queue
         void Update()
         {
-            if (!isLocalPlayer) return;
+            //  if (!isLocalPlayer) return;
 
-            
+
         }
 
         [Command]
@@ -221,7 +141,7 @@ namespace TheAttack
 
                 default:
 
-                    if (!_ignoreAttack)
+                    if (!_ignoreAttack) // and if attak direction pussible
                         RpcAttack();
 
                     break;

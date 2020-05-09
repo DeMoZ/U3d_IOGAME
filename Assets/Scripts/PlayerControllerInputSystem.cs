@@ -14,12 +14,37 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerControllerInputSystem : NetworkBehaviour
 {
+    public delegate void MoveEvent(Vector2 vector2);
+    /// <summary>
+    /// Event invoked on Move Arrows pressed
+    /// </summary>
+    public MoveEvent OnMoveEvent;
+
+    /// <summary>
+    /// All no parameters events 
+    /// </summary>
+    public enum NoParamEvents
+    {
+        AttackUp,
+        AttackDn,
+        AttackLt,
+        AttackRt,
+    }
+    /// <summary>
+    /// Dictionary for events with no params related to NoParamEvents enum
+    /// </summary>
+    public Dictionary<NoParamEvents, UnityEvent> m_events = new Dictionary<NoParamEvents, UnityEvent>();
+
 #if INSTALL_CAMERA
     [SerializeField] GameObject _playerCameraPrefab;
 #endif
     Transform _cameraT;
 
+    /// <summary>
+    /// the input action file with all actions presets
+    /// </summary>
     private TheInputActions _inputActions;
+
     private Vector3 _direction = Vector3.zero;
 
     /// <summary>
@@ -27,14 +52,14 @@ public class PlayerControllerInputSystem : NetworkBehaviour
     /// </summary>    
     private Vector3 velocityPrevious = Vector3.zero;
 
-    public Vector3 GetInput()
-    {
-        return _direction;
-    }
+
 
     private void Awake()
     {
         _inputActions = new TheInputActions();
+
+        _inputActions.PlayerControls.Move.performed += cntx => InvokeMoveEvent(cntx.ReadValue<Vector2>());
+
         _inputActions.PlayerControls.AttackUp.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackUp);
         _inputActions.PlayerControls.AttackDn.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackDn);
         _inputActions.PlayerControls.AttackLt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackLt);
@@ -55,21 +80,74 @@ public class PlayerControllerInputSystem : NetworkBehaviour
 #endif
     }
 
-    //----------------------------------------------------------
-
-    /// <summary>
-    /// All no parameters events 
-    /// </summary>
-    public enum NoParamEvents
+    #region Move event
+    private void InvokeMoveEvent(Vector2 vector2)
     {
-        AttackUp,
-        AttackDn,
-        AttackLt,
-        AttackRt,
+        vector2 = DirectionCameraRelated(vector2);
+
+        OnMoveEvent?.Invoke(vector2);
     }
 
-    public Dictionary<NoParamEvents, UnityEvent> m_events = new Dictionary<NoParamEvents, UnityEvent>();
+    private Vector2 DirectionCameraRelated(Vector2 input)
+    {
+        Vector3 velocity = Vector3.zero;
+        velocity.x = input.x;
+        velocity.z = input.y;
 
+        // camera forward and right vectors:
+        Vector3 forward = _cameraT.forward;
+        Vector3 right = _cameraT.right;
+
+        //project forward and right vectors on the horizontal plane (y = 0)
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        //this is the direction in the world space we want to move:
+        velocity = forward * velocity.z + right * velocity.x;
+
+        // velocity magnitude not more than 1
+        velocity = Vector3.ClampMagnitude(velocity, 1);
+        return new Vector2(velocity.x, velocity.z);
+    }
+
+    private Vector3 DirectionCameraRelated(Vector3 input)
+    {
+        Vector3 velocity = Vector3.zero;
+        velocity.x = input.x;
+        velocity.z = input.y;
+
+        // camera forward and right vectors:
+        Vector3 forward = _cameraT.forward;
+        Vector3 right = _cameraT.right;
+
+        //project forward and right vectors on the horizontal plane (y = 0)
+        forward.y = 0f;
+        right.y = 0f;
+        forward.Normalize();
+        right.Normalize();
+
+        //this is the direction in the world space we want to move:
+        velocity = forward * velocity.z + right * velocity.x;
+
+        // velocity magnitude not more than 1
+        velocity = Vector3.ClampMagnitude(velocity, 1);
+        return velocity;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Subscribe a method to move event (Vector2)
+    /// </summary>
+    /// <param name="callback"></param>
+    public void SubscribeMeOnMoveEvent(MoveEvent callback)
+    {
+        OnMoveEvent += callback;
+    }
+
+    #region UnityEvents with no Params
     /// <summary>
     /// Adds events into dictionary. Key is enum variables
     /// </summary>
@@ -103,15 +181,15 @@ public class PlayerControllerInputSystem : NetworkBehaviour
     /// </summary>
     /// <param name="noParamEvents"></param>
     public void InvokeNoParamEvents(NoParamEvents noParamEvents)
-    {    
+    {
         UnityEvent even;
         m_events.TryGetValue(noParamEvents, out even);
 
         even?.Invoke();
     }
 
+    #endregion
 
-    //
 
     private void OnEnable()
     {

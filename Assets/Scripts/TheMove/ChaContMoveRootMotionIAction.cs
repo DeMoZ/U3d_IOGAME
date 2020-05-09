@@ -8,7 +8,7 @@ namespace TheMove
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(ActionStateMachine))]
-    public class ChaContMoveRootMotionIAction : NetworkBehaviour, IMove,IAction
+    public class ChaContMoveRootMotionIAction : NetworkBehaviour, IMove, IAction
     {
         [Tooltip("Hero move speed")]
         [SerializeField] private float _speed = 2;
@@ -22,6 +22,18 @@ namespace TheMove
         private Animator _animator;
         private Transform _transform;
 
+        private PlayerControllerInputSystem _playerControllerInputSystem;
+        private PlayerControllerInputSystem GetPlayerControllerInputSystem
+        {
+            get
+            {
+                if (!_playerControllerInputSystem)
+                    _playerControllerInputSystem = GetComponent<PlayerControllerInputSystem>();
+
+                return _playerControllerInputSystem;
+            }
+        }
+
         void Awake()
         {
             _characterController = GetComponent<CharacterController>();
@@ -29,14 +41,24 @@ namespace TheMove
             _actionStateMachine = GetComponent<ActionStateMachine>();
             _transform = transform;
 
-            //_navMeshAgent.speed = _speed;
+            // subscribe to move events
+            GetPlayerControllerInputSystem.SubscribeMeOnMoveEvent(Move);
+        }
+
+        /// <summary>
+        /// intermediate method to translate v2 to v3
+        /// </summary>
+        /// <param name="direction"></param>
+        private void Move(Vector2 direction)
+        {
+            Move(new Vector3(direction.x, 0, direction.y));
         }
 
         public void Move(Vector3 direction)
         {
             if (!_actionStateMachine.AllowAction(this)) return;
 
-            Debug.Log($"Going to move, direction {direction}") ;
+            Debug.Log($"Going to move, direction {direction}");
             // _characterController.Move(direction * _speed * Time.deltaTime);
 
             // Vector3 inverseTransform = _transform.InverseTransformDirection(_characterController.velocity);
@@ -61,8 +83,8 @@ namespace TheMove
 
         public bool IsInAction()
         {
-           // returns true if some kind of jumping of something like that
-           // but for now it always false
+            // returns true if some kind of jumping of something like that
+            // but for now it always false
 
             return false;
         }
