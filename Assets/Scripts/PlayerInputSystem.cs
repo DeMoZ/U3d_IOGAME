@@ -48,17 +48,16 @@ public class PlayerInputSystem : NetworkBehaviour
     private Vector3 _direction = Vector3.zero;
 
     /// <summary>
-    /// cashed velocity prom previous frame;
-    /// </summary>    
-    private Vector3 velocityPrevious = Vector3.zero;
-
-
+    /// Input vector2.magnitude limit from touch move control (separates move and run)
+    /// </summary>
+    private float _walkRunLimitFromTouch = 0.5f;
 
     private void Awake()
     {
         _inputActions = new TheInputActions();
 
         _inputActions.PlayerControls.Move.performed += cntx => InvokeMoveEvent(cntx.ReadValue<Vector2>());
+        _inputActions.PlayerControls.MoveTouch.performed += cntx => InvokeMoveTouchEvent(cntx.ReadValue<Vector2>());
 
         _inputActions.PlayerControls.AttackUp.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackUp);
         _inputActions.PlayerControls.AttackDn.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackDn);
@@ -84,9 +83,38 @@ public class PlayerInputSystem : NetworkBehaviour
     private void InvokeMoveEvent(Vector2 vector2)
     {
         vector2 = DirectionCameraRelated(vector2);
-
         OnMoveEvent?.Invoke(vector2);
     }
+
+    private void InvokeMoveTouchEvent(Vector2 vector2)
+    {
+        // walk or run from touch
+        // Vector normalized if vector.magnitude > 0.5
+        // Otherwise half nomalized 
+
+        vector2 = (vector2.sqrMagnitude > _walkRunLimitFromTouch * _walkRunLimitFromTouch) ?
+            vector2.normalized :
+            vector2.normalized * _walkRunLimitFromTouch;
+
+        vector2 = DirectionCameraRelated(vector2);
+        OnMoveEvent?.Invoke(vector2);
+    }
+
+    //public Vector2 _Input;
+    //public float _Magnitude;
+    //public float _SqrMagnitude;
+    //public bool _magMore;
+    //public bool _scrMore;
+    //private void Update()
+    //{
+    //    Vector2 vector2 = _Input;
+
+    //    _Magnitude = vector2.magnitude;
+    //    _SqrMagnitude = vector2.sqrMagnitude;
+    //    _magMore = _Magnitude > 0.5f;
+    //    _scrMore = _SqrMagnitude > 0.5f * 0.5f;
+    //}
+
 
     private Vector2 DirectionCameraRelated(Vector2 input)
     {

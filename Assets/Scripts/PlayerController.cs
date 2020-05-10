@@ -10,6 +10,7 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(AttackQueueAction))]
 [RequireComponent(typeof(PlayerInputSystem))]
+[RequireComponent(typeof(IMoveController))]
 public class PlayerController : MonoBehaviour
 {
     private PlayerInputSystem _playerControllerInputSystem;
@@ -36,21 +37,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private ChaContMoveRootMotionIAction _iMove;
-    private ChaContMoveRootMotionIAction GetIMove
+    private IMoveController _iMoveController;
+    private IMoveController GetMoveController
     {
         get
         {
-            if (_iMove == null)
-                _iMove = GetComponent<ChaContMoveRootMotionIAction>();
+            if (_iMoveController == null)
+                _iMoveController = GetComponent<IMoveController>();
 
-            return _iMove;
+            return _iMoveController;
         }
     }
 
     private void Awake()
     {
-        GetPlayerControllerInputSystem.SubscribeMeOnMoveEvent(GetIMove.Move);
+        GetPlayerControllerInputSystem.SubscribeMeOnMoveEvent(GetMoveController.Move);
 
         GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackUp, GetAttackQueueAction.AttackUp);
         GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackDn, GetAttackQueueAction.AttackDn);

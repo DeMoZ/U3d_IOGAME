@@ -29,6 +29,14 @@ namespace TheInput
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""MoveTouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d020d72-1e8f-4447-9c89-392b417c5ecc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""AttackUp"",
                     ""type"": ""Button"",
                     ""id"": ""e62f6975-cf46-4752-8668-13c0ebc97806"",
@@ -215,6 +223,17 @@ namespace TheInput
                     ""action"": ""AttackRt"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c12653c-b26e-48cc-8060-f1084e6061d5"",
+                    ""path"": ""<Touchscreen>/touch2/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""MoveTouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -252,6 +271,7 @@ namespace TheInput
             // PlayerControls
             m_PlayerControls = asset.FindActionMap("PlayerControls", throwIfNotFound: true);
             m_PlayerControls_Move = m_PlayerControls.FindAction("Move", throwIfNotFound: true);
+            m_PlayerControls_MoveTouch = m_PlayerControls.FindAction("MoveTouch", throwIfNotFound: true);
             m_PlayerControls_AttackUp = m_PlayerControls.FindAction("AttackUp", throwIfNotFound: true);
             m_PlayerControls_AttackDn = m_PlayerControls.FindAction("AttackDn", throwIfNotFound: true);
             m_PlayerControls_AttackLt = m_PlayerControls.FindAction("AttackLt", throwIfNotFound: true);
@@ -306,6 +326,7 @@ namespace TheInput
         private readonly InputActionMap m_PlayerControls;
         private IPlayerControlsActions m_PlayerControlsActionsCallbackInterface;
         private readonly InputAction m_PlayerControls_Move;
+        private readonly InputAction m_PlayerControls_MoveTouch;
         private readonly InputAction m_PlayerControls_AttackUp;
         private readonly InputAction m_PlayerControls_AttackDn;
         private readonly InputAction m_PlayerControls_AttackLt;
@@ -315,6 +336,7 @@ namespace TheInput
             private @TheInputActions m_Wrapper;
             public PlayerControlsActions(@TheInputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_PlayerControls_Move;
+            public InputAction @MoveTouch => m_Wrapper.m_PlayerControls_MoveTouch;
             public InputAction @AttackUp => m_Wrapper.m_PlayerControls_AttackUp;
             public InputAction @AttackDn => m_Wrapper.m_PlayerControls_AttackDn;
             public InputAction @AttackLt => m_Wrapper.m_PlayerControls_AttackLt;
@@ -331,6 +353,9 @@ namespace TheInput
                     @Move.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMove;
                     @Move.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMove;
                     @Move.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMove;
+                    @MoveTouch.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMoveTouch;
+                    @MoveTouch.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMoveTouch;
+                    @MoveTouch.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnMoveTouch;
                     @AttackUp.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackUp;
                     @AttackUp.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackUp;
                     @AttackUp.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackUp;
@@ -350,6 +375,9 @@ namespace TheInput
                     @Move.started += instance.OnMove;
                     @Move.performed += instance.OnMove;
                     @Move.canceled += instance.OnMove;
+                    @MoveTouch.started += instance.OnMoveTouch;
+                    @MoveTouch.performed += instance.OnMoveTouch;
+                    @MoveTouch.canceled += instance.OnMoveTouch;
                     @AttackUp.started += instance.OnAttackUp;
                     @AttackUp.performed += instance.OnAttackUp;
                     @AttackUp.canceled += instance.OnAttackUp;
@@ -387,6 +415,7 @@ namespace TheInput
         public interface IPlayerControlsActions
         {
             void OnMove(InputAction.CallbackContext context);
+            void OnMoveTouch(InputAction.CallbackContext context);
             void OnAttackUp(InputAction.CallbackContext context);
             void OnAttackDn(InputAction.CallbackContext context);
             void OnAttackLt(InputAction.CallbackContext context);

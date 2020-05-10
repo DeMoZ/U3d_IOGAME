@@ -14,6 +14,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "MoveTouch",
+                    "type": "Button",
+                    "id": "9d020d72-1e8f-4447-9c89-392b417c5ecc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "AttackUp",
                     "type": "Button",
                     "id": "e62f6975-cf46-4752-8668-13c0ebc97806",
@@ -198,6 +206,17 @@
                     "processors": "",
                     "groups": "Keyboard and Mouse",
                     "action": "AttackRt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c12653c-b26e-48cc-8060-f1084e6061d5",
+                    "path": "<Touchscreen>/touch2/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Touch",
+                    "action": "MoveTouch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
