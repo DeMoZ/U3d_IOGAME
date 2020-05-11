@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using TheAttack;
 using TheMove;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 /// <summary>
 /// General script that manages communication between classes
 /// </summary>
+[DisallowMultipleComponent]
+
 [RequireComponent(typeof(AttackQueueAction))]
 [RequireComponent(typeof(PlayerInputSystem))]
-[RequireComponent(typeof(IMoveController))]
+//[RequireComponent(typeof(IMoveController))]
 public class PlayerController : MonoBehaviour
 {
     private PlayerInputSystem _playerControllerInputSystem;
@@ -37,21 +40,40 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IMoveController _iMoveController;
-    private IMoveController GetMoveController
+    private IMove _iMove;
+    private IMove GetMove
     {
         get
         {
-            if (_iMoveController == null)
-                _iMoveController = GetComponent<IMoveController>();
+            if (_iMove == null)
+                _iMove = GetComponent<IMove>();
 
-            return _iMoveController;
+            return _iMove;
+        }
+    }
+    
+    /// <summary>
+    /// Helper class to subscribe iMove inhereited class to move buttons events
+    /// </summary>
+    public class MoveHelper
+    {
+        IMove _iMove;
+        public MoveHelper(IMove move)
+        {
+            _iMove = move;
+        }
+
+        public void Move(Vector2 vector2)
+        {
+            _iMove.Move(vector2);
         }
     }
 
     private void Awake()
     {
-        GetPlayerControllerInputSystem.SubscribeMeOnMoveEvent(GetMoveController.Move);
+        MoveHelper moveHelper = new MoveHelper(GetMove);
+
+        GetPlayerControllerInputSystem.SubscribeMeOnMoveEvent(moveHelper.Move);
 
         GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackUp, GetAttackQueueAction.AttackUp);
         GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackDn, GetAttackQueueAction.AttackDn);
