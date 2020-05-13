@@ -9,6 +9,7 @@ namespace TheMove
     /// </summary>
     public interface IMove
     {
-        void Move(Vector2 direction);      
+        void Move(Vector2 direction);
+        void Turn(Vector2 rotation);
     }
 }

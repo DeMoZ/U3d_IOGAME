@@ -22,6 +22,11 @@ namespace TheMove
             throw new System.NotImplementedException();
         }
 
+        public void Turn(Vector2 rotation)
+        {
+            throw new System.NotImplementedException();
+        }
+
         void Start()
         {
             _transform = transform;

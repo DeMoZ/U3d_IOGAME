@@ -95,6 +95,12 @@ namespace TheMove
 
             return false;
         }
+
+        public Vector2 _TurnCheck = new Vector2();
+        public void Turn(Vector2 rotation)
+        {
+            _TurnCheck = rotation;
+        }
     }
 }
 

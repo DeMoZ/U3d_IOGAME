@@ -14,11 +14,16 @@ using UnityEngine.Events;
 /// </summary>
 public class PlayerInputSystem : NetworkBehaviour
 {
-    public delegate void MoveEvent(Vector2 vector2);
+    public delegate void Vector2Event(Vector2 vector2);
     /// <summary>
     /// Event invoked on Move Arrows pressed
     /// </summary>
-    public MoveEvent OnMoveEvent;
+    public Vector2Event OnMoveEvent;
+
+    /// <summary>
+    /// Event invoked on Camera rotate
+    /// </summary>
+    public Vector2Event OnCameraRotateEvent;
 
     /// <summary>
     /// All no parameters events 
@@ -170,10 +175,20 @@ public class PlayerInputSystem : NetworkBehaviour
     /// Subscribe a method to move event (Vector2)
     /// </summary>
     /// <param name="callback"></param>
-    public void SubscribeMeOnMoveEvent(MoveEvent callback)
+    public void SubscribeMeOnMoveEvent(Vector2Event callback)
     {
         OnMoveEvent += callback;
     }
+
+    /// <summary>
+    /// Subscribe a method to Turn event (Vector2)
+    /// </summary>
+    /// <param name="callback"></param>
+    public void SubscribeMeOnCameraRotateEvent(Vector2Event callback)
+    {
+        OnCameraRotateEvent += callback;
+    }
+
 
     #region UnityEvents with no Params
     /// <summary>
@@ -185,7 +200,7 @@ public class PlayerInputSystem : NetworkBehaviour
         {
             m_events.Add((NoParamEvents)e, new UnityEvent());
         }
-        Debug.Log("Event dictionary filled");
+        // Debug.Log("Event dictionary filled");
     }
 
     /// <summary>
@@ -227,5 +242,21 @@ public class PlayerInputSystem : NetworkBehaviour
     private void OnDisable()
     {
         _inputActions.Disable();
+    }
+
+    /// <summary>
+    /// keep rotation from previous frame
+    /// </summary>
+    private Quaternion _rotationEx = new Quaternion();
+    private void Update()
+    {
+        // check if camera changed rotation. If true, triggers the event for who may concern
+        if (_rotationEx != _cameraT.rotation)
+        {
+            Vector2 vector2 = _cameraT.rotation.eulerAngles;
+            OnCameraRotateEvent?.Invoke(vector2);
+
+            _rotationEx = _cameraT.rotation;
+        }
     }
 }

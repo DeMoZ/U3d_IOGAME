@@ -61,6 +61,11 @@ namespace TheMove
             throw new System.NotImplementedException();
         }
 
+        public void Turn(Vector2 rotation)
+        {
+            throw new System.NotImplementedException();
+        }
+
         //private Vector3 VelocityRelatedTransform(Transform objectTransform, Vector3 vector)
         //{
         //    Vector3 velocity = vector;
