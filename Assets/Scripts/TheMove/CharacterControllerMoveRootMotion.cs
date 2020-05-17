@@ -58,7 +58,7 @@ namespace TheMove
             throw new System.NotImplementedException();
         }
 
-        public void Turn(Vector2 rotation)
+        public void Turn(Vector3 direction)
         {
             throw new System.NotImplementedException();
         }

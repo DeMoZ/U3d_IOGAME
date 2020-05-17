@@ -59,36 +59,34 @@ namespace TheMove
         /// <summary>
         /// received direction related to camera. Not related to character direction.
         /// </summary>
-        private Vector3 _direction = Vector2.zero;
-        private Vector3 _velocityEx = Vector3.zero;
+        private Vector3 _moveDirection = Vector2.zero;
+        private Vector3 _moveVelocityEx = Vector3.zero;
 
+        private Vector3 _turnDirection = Vector3.zero;
+        public float turnAngle;
         /// <summary>
         /// Method striked from outside class. Sets the direction for movement.
         /// </summary>
         /// <param name="direction"></param>
         public void Move(Vector2 direction)
         {
-            _direction = new Vector3(direction.x, 0, direction.y);
+            _moveDirection = new Vector3(direction.x, 0, direction.y);
         }
 
-        public float angle;
-        public Vector3 transformForward;
         private void Update()
         {
-            Vector3 velocity = GetTransform.InverseTransformDirection(_direction);
-            velocity = Vector3.Lerp(_velocityEx, velocity, Time.deltaTime * _acceleration);
+            // move
+            Vector3 moveVelocity = GetTransform.InverseTransformDirection(_moveDirection);
+            moveVelocity = Vector3.Lerp(_moveVelocityEx, moveVelocity, Time.deltaTime * _acceleration);
 
-            Move(velocity);
-            _velocityEx = velocity;
-        }
+            CmdMoveAnimation(moveVelocity);
+            _moveVelocityEx = moveVelocity;
 
-        /// <summary>
-        /// Mthod 
-        /// </summary>
-        /// <param name="direction"></param>
-        private void Move(Vector3 direction)
-        {
-            CmdMoveAnimation(direction);
+            // turn
+            // float
+            turnAngle = Vector3.SignedAngle(GetTransform.forward, _turnDirection, Vector3.up);
+
+            CmdTurnAnimation(turnAngle);
         }
 
         [Command]
@@ -116,12 +114,12 @@ namespace TheMove
             return false;
         }
 
-        public Vector2 _TurnCheck = new Vector2();
-        public void Turn(Vector2 rotation)
-        {
-            _TurnCheck = rotation;
 
-            CmdTurnAnimation(rotation.y);
+        public void Turn(Vector3 direction)
+        {
+            _turnDirection = direction;
+
+            //CmdTurnAnimation(rotation.y);
         }
 
         [Command]
@@ -133,7 +131,7 @@ namespace TheMove
         [ClientRpc]
         private void RpcTurnAnimation(float value)
         {
-            //   GetAnimator.SetFloat(_animatorTurn, value);
+            GetAnimator.SetFloat(_animatorTurn, value);
         }
     }
 }

@@ -63,14 +63,14 @@ public class PlayerController : MonoBehaviour
             _iMove = move;
         }
 
-        public void Move(Vector2 vector2)
+        public void Move(Vector2 vector)
         {
-            _iMove.Move(vector2);
+            _iMove.Move(vector);
         }
 
-        public void Turn(Vector2 vector2)
+        public void Turn(Vector3 vector)
         {
-            _iMove.Turn(vector2);
+            _iMove.Turn(vector);
         }
     }
 

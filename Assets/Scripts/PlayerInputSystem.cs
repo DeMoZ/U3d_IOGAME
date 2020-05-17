@@ -15,6 +15,7 @@ using UnityEngine.Events;
 public class PlayerInputSystem : NetworkBehaviour
 {
     public delegate void Vector2Event(Vector2 vector2);
+    public delegate void Vector3Event(Vector3 vector3);
     /// <summary>
     /// Event invoked on Move Arrows pressed
     /// </summary>
@@ -23,7 +24,7 @@ public class PlayerInputSystem : NetworkBehaviour
     /// <summary>
     /// Event invoked on Camera rotate
     /// </summary>
-    public Vector2Event OnCameraRotateEvent;
+    public Vector3Event OnCameraRotateEvent;
 
     /// <summary>
     /// All no parameters events 
@@ -44,7 +45,7 @@ public class PlayerInputSystem : NetworkBehaviour
     [SerializeField] GameObject _playerCameraPrefab;
 #endif
     Transform _cameraT;
-    
+
     /// <summary>
     /// the input action file with all actions presets
     /// </summary>
@@ -56,6 +57,11 @@ public class PlayerInputSystem : NetworkBehaviour
     /// Input vector2.magnitude limit from touch move control (separates move and run)
     /// </summary>
     private float _walkRunLimitFromTouch = 0.5f;
+
+    /// <summary>
+    /// keeps rotation from previous frame
+    /// </summary>
+    private Quaternion _rotationEx = new Quaternion();
 
     private void Awake()
     {
@@ -144,7 +150,7 @@ public class PlayerInputSystem : NetworkBehaviour
         velocity = Vector3.ClampMagnitude(velocity, 1);
         return new Vector2(velocity.x, velocity.z);
     }
-        
+
     #endregion
 
     /// <summary>
@@ -160,7 +166,7 @@ public class PlayerInputSystem : NetworkBehaviour
     /// Subscribe a method to Turn event (Vector2)
     /// </summary>
     /// <param name="callback"></param>
-    public void SubscribeMeOnCameraTurnEvent(Vector2Event callback)
+    public void SubscribeMeOnCameraTurnEvent(Vector3Event callback)
     {
         OnCameraRotateEvent += callback;
     }
@@ -220,17 +226,14 @@ public class PlayerInputSystem : NetworkBehaviour
         _inputActions.Disable();
     }
 
-    /// <summary>
-    /// keeps rotation from previous frame
-    /// </summary>
-    private Quaternion _rotationEx = new Quaternion();
     private void Update()
     {
         // check if camera changed rotation. If true, triggers the event for who may concern
         if (_rotationEx != _cameraT.rotation)
         {
-            Vector2 vector2 = _cameraT.rotation.eulerAngles;
-            OnCameraRotateEvent?.Invoke(vector2);
+            Vector3 vector = _cameraT.forward;
+            vector.y = 0;
+            OnCameraRotateEvent?.Invoke(vector);
 
             _rotationEx = _cameraT.rotation;
         }
