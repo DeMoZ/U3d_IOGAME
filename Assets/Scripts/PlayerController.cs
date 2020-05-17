@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
             return _iMove;
         }
     }
-    
+
     /// <summary>
     /// Helper class to subscribe iMove inhereited class to move buttons events
     /// </summary>
@@ -67,6 +67,11 @@ public class PlayerController : MonoBehaviour
         {
             _iMove.Move(vector2);
         }
+
+        public void Turn(Vector2 vector2)
+        {
+            _iMove.Turn(vector2);
+        }
     }
 
     private void Awake()
@@ -74,6 +79,8 @@ public class PlayerController : MonoBehaviour
         MoveHelper moveHelper = new MoveHelper(GetMove);
 
         GetPlayerControllerInputSystem.SubscribeMeOnMoveEvent(moveHelper.Move);
+
+        GetPlayerControllerInputSystem.SubscribeMeOnCameraTurnEvent(moveHelper.Turn);
 
         GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackUp, GetAttackQueueAction.AttackUp);
         GetPlayerControllerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackDn, GetAttackQueueAction.AttackDn);

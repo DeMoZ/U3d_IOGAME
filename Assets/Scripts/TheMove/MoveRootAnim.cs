@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
@@ -17,6 +18,8 @@ namespace TheMove
         [SerializeField] private string _animatorMoveRight = "MoveRight";
         [Tooltip("Field name in animator controller to move Forward / Backward")]
         [SerializeField] private string _animatorMoveForward = "MoveForward";
+        [Tooltip("Field name in animator controller to Turn")]
+        [SerializeField] private string _animatorTurn = "Turn";
 
         private ActionStateMachine _actionStateMachine;
         private ActionStateMachine GetActionStateMachine
@@ -42,16 +45,22 @@ namespace TheMove
             }
         }
 
-        private Vector2 _direction = Vector2.zero;
-        private Vector2 _velocityEx = Vector2.zero;
-
-        private void Update()
+        private Transform _transform;
+        private Transform GetTransform
         {
-            Vector2 velocity = Vector2.Lerp(_velocityEx, _direction, Time.deltaTime * _acceleration);
+            get
+            {
+                if (!_transform)
+                    _transform = transform;
 
-            Move(new Vector3(velocity.x, 0, velocity.y));
-            _velocityEx = velocity;
+                return _transform;
+            }
         }
+        /// <summary>
+        /// received direction related to camera. Not related to character direction.
+        /// </summary>
+        private Vector3 _direction = Vector2.zero;
+        private Vector3 _velocityEx = Vector3.zero;
 
         /// <summary>
         /// Method striked from outside class. Sets the direction for movement.
@@ -59,7 +68,18 @@ namespace TheMove
         /// <param name="direction"></param>
         public void Move(Vector2 direction)
         {
-            _direction = direction;
+            _direction = new Vector3(direction.x, 0, direction.y);
+        }
+
+        public float angle;
+        public Vector3 transformForward;
+        private void Update()
+        {
+            Vector3 velocity = GetTransform.InverseTransformDirection(_direction);
+            velocity = Vector3.Lerp(_velocityEx, velocity, Time.deltaTime * _acceleration);
+
+            Move(velocity);
+            _velocityEx = velocity;
         }
 
         /// <summary>
@@ -100,6 +120,20 @@ namespace TheMove
         public void Turn(Vector2 rotation)
         {
             _TurnCheck = rotation;
+
+            CmdTurnAnimation(rotation.y);
+        }
+
+        [Command]
+        private void CmdTurnAnimation(float value)
+        {
+            RpcTurnAnimation(value);
+        }
+
+        [ClientRpc]
+        private void RpcTurnAnimation(float value)
+        {
+            //   GetAnimator.SetFloat(_animatorTurn, value);
         }
     }
 }

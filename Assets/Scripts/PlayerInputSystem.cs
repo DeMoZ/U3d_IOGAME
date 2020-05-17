@@ -44,7 +44,7 @@ public class PlayerInputSystem : NetworkBehaviour
     [SerializeField] GameObject _playerCameraPrefab;
 #endif
     Transform _cameraT;
-
+    
     /// <summary>
     /// the input action file with all actions presets
     /// </summary>
@@ -144,31 +144,7 @@ public class PlayerInputSystem : NetworkBehaviour
         velocity = Vector3.ClampMagnitude(velocity, 1);
         return new Vector2(velocity.x, velocity.z);
     }
-
-    private Vector3 DirectionCameraRelated(Vector3 input)
-    {
-        Vector3 velocity = Vector3.zero;
-        velocity.x = input.x;
-        velocity.z = input.y;
-
-        // camera forward and right vectors:
-        Vector3 forward = _cameraT.forward;
-        Vector3 right = _cameraT.right;
-
-        //project forward and right vectors on the horizontal plane (y = 0)
-        forward.y = 0f;
-        right.y = 0f;
-        forward.Normalize();
-        right.Normalize();
-
-        //this is the direction in the world space we want to move:
-        velocity = forward * velocity.z + right * velocity.x;
-
-        // velocity magnitude not more than 1
-        velocity = Vector3.ClampMagnitude(velocity, 1);
-        return velocity;
-    }
-
+        
     #endregion
 
     /// <summary>
@@ -184,7 +160,7 @@ public class PlayerInputSystem : NetworkBehaviour
     /// Subscribe a method to Turn event (Vector2)
     /// </summary>
     /// <param name="callback"></param>
-    public void SubscribeMeOnCameraRotateEvent(Vector2Event callback)
+    public void SubscribeMeOnCameraTurnEvent(Vector2Event callback)
     {
         OnCameraRotateEvent += callback;
     }
@@ -245,7 +221,7 @@ public class PlayerInputSystem : NetworkBehaviour
     }
 
     /// <summary>
-    /// keep rotation from previous frame
+    /// keeps rotation from previous frame
     /// </summary>
     private Quaternion _rotationEx = new Quaternion();
     private void Update()
