@@ -1,4 +1,4 @@
-﻿//#define INSTALL_CAMERA
+﻿#define INSTALL_CAMERA
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,7 +44,7 @@ public class PlayerInputSystem : NetworkBehaviour
 #if INSTALL_CAMERA
     [SerializeField] GameObject _playerCameraPrefab;
 #endif
-    Transform _cameraT;
+    PlayerCamera _playerCamera;
 
     /// <summary>
     /// the input action file with all actions presets
@@ -76,18 +76,27 @@ public class PlayerInputSystem : NetworkBehaviour
         _inputActions.PlayerControls.AttackRt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackRt);
 
 #if INSTALL_CAMERA
+
+        InitializeCamera();
+#else
+        _cameraT = Camera.main.transform;
+#endif
+    }
+
+    private void InitializeCamera()
+    {
         if (!_playerCameraPrefab)
             throw new System.Exception($"_ Camera prefab not set for {this}");
 
         // instantiate player camera
         Vector3 position = Vector3.zero;
         Quaternion rotation = Quaternion.LookRotation(transform.position - position, Vector3.up);
-        GameObject cameraGO = Instantiate(_playerCameraPrefab, position, rotation);
+        _playerCamera = Instantiate(_playerCameraPrefab, position, rotation).GetComponent<PlayerCamera>();
 
-        _cameraT = _playerCameraPrefab.transform;
-#else
-        _cameraT = Camera.main.transform;
-#endif
+        if (!_playerCamera)
+            throw new System.Exception($"PlayerCameraPrefab doesnt have component PlayerCamera");
+
+        _playerCamera.Initialize(transform,transform);
     }
 
     #region Move event
@@ -134,8 +143,8 @@ public class PlayerInputSystem : NetworkBehaviour
         velocity.z = input.y;
 
         // camera forward and right vectors:
-        Vector3 forward = _cameraT.forward;
-        Vector3 right = _cameraT.right;
+        Vector3 forward = _playerCamera.GetTransform.forward;
+        Vector3 right = _playerCamera.GetTransform.right;
 
         //project forward and right vectors on the horizontal plane (y = 0)
         forward.y = 0f;
@@ -229,13 +238,13 @@ public class PlayerInputSystem : NetworkBehaviour
     private void Update()
     {
         // check if camera changed rotation. If true, triggers the event for who may concern
-        if (_rotationEx != _cameraT.rotation)
+        if (_rotationEx != _playerCamera.GetTransform.rotation)
         {
-            Vector3 vector = _cameraT.forward;
+            Vector3 vector = _playerCamera.GetTransform.forward;
             vector.y = 0;
             OnCameraRotateEvent?.Invoke(vector);
 
-            _rotationEx = _cameraT.rotation;
+            _rotationEx = _playerCamera.GetTransform.rotation;
         }
     }
 }
