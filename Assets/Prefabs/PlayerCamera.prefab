@@ -80,6 +80,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5947ba15e9302f9498c387b2b43613f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _followingOffset: {x: 0, y: 3.54, z: -4}
+  _followingOffsetDumpling: {x: 1, y: 5, z: 3, w: 0}
 --- !u!1 &6503991899654725027
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 0, z: -10}
+  m_FollowOffset: {x: 0, y: 0, z: 0}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1

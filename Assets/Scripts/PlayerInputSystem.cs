@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 using TheInput;
 using Mirror;
 using UnityEngine.Events;
-
+using TheCamera;
 /// <summary>
 ///  Input based on Imput system
 /// </summary>
@@ -44,7 +44,7 @@ public class PlayerInputSystem : NetworkBehaviour
 #if INSTALL_CAMERA
     [SerializeField] GameObject _playerCameraPrefab;
 #endif
-    PlayerCamera _playerCamera;
+    IPlayerCamera _playerCamera;
 
     /// <summary>
     /// the input action file with all actions presets
@@ -70,6 +70,8 @@ public class PlayerInputSystem : NetworkBehaviour
         _inputActions.PlayerControls.Move.performed += cntx => InvokeMoveEvent(cntx.ReadValue<Vector2>());
         _inputActions.PlayerControls.MoveTouch.performed += cntx => InvokeMoveTouchEvent(cntx.ReadValue<Vector2>());
 
+        //_inputActions.PlayerControls.MouseMove.performed += cntx => InvokeMouseMoveEvent(cntx.ReadValue<Vector2>());
+
         _inputActions.PlayerControls.AttackUp.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackUp);
         _inputActions.PlayerControls.AttackDn.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackDn);
         _inputActions.PlayerControls.AttackLt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackLt);
@@ -91,12 +93,12 @@ public class PlayerInputSystem : NetworkBehaviour
         // instantiate player camera
         Vector3 position = Vector3.zero;
         Quaternion rotation = Quaternion.LookRotation(transform.position - position, Vector3.up);
-        _playerCamera = Instantiate(_playerCameraPrefab, position, rotation).GetComponent<PlayerCamera>();
+        _playerCamera = Instantiate(_playerCameraPrefab, position, rotation).GetComponent<IPlayerCamera>();
 
-        if (!_playerCamera)
+        if (_playerCamera == null)
             throw new System.Exception($"PlayerCameraPrefab doesnt have component PlayerCamera");
 
-        _playerCamera.Initialize(transform,transform);
+        _playerCamera.Init(transform,transform);
     }
 
     #region Move event
@@ -235,7 +237,7 @@ public class PlayerInputSystem : NetworkBehaviour
         _inputActions.Disable();
     }
 
-    private void Update()
+    private void Update()// возможно бег в стороны надо вынести на класс движения и стороны должны зависить от поворота игрока, в случае с рут анимацией
     {
         // check if camera changed rotation. If true, triggers the event for who may concern
         if (_rotationEx != _playerCamera.GetTransform.rotation)
