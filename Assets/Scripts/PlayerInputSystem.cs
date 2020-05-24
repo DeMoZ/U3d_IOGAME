@@ -1,18 +1,17 @@
-﻿#define INSTALL_CAMERA
+﻿//#define INSTALL_CAMERA
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 using TheInput;
-using Mirror;
 using UnityEngine.Events;
 using TheCamera;
+
 /// <summary>
 ///  Input based on Imput system
 /// </summary>
-public class PlayerInputSystem : NetworkBehaviour
+public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
 {
     public delegate void Vector2Event(Vector2 vector2);
     public delegate void Vector3Event(Vector3 vector3);
@@ -41,10 +40,10 @@ public class PlayerInputSystem : NetworkBehaviour
     /// </summary>
     public Dictionary<NoParamEvents, UnityEvent> m_events = new Dictionary<NoParamEvents, UnityEvent>();
 
-#if INSTALL_CAMERA
-    [SerializeField] GameObject _playerCameraPrefab;
-#endif
-    IPlayerCamera _playerCamera;
+    /// <summary>
+    /// Player Camera script on the camera that follows player body
+    /// </summary>
+    private IPlayerCamera _playerCamera;
 
     /// <summary>
     /// the input action file with all actions presets
@@ -76,40 +75,30 @@ public class PlayerInputSystem : NetworkBehaviour
         _inputActions.PlayerControls.AttackDn.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackDn);
         _inputActions.PlayerControls.AttackLt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackLt);
         _inputActions.PlayerControls.AttackRt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackRt);
-
-#if INSTALL_CAMERA
-
-        InitializeCamera();
-#else
-        _cameraT = Camera.main.transform;
-#endif
     }
 
-    private void InitializeCamera()
+    /// <summary>
+    /// Initialize 
+    /// </summary>
+    public void Init(IPlayerCamera playerCamera)
     {
-        if (!_playerCameraPrefab)
-            throw new System.Exception($"_ Camera prefab not set for {this}");
-
-        // instantiate player camera
-        Vector3 position = Vector3.zero;
-        Quaternion rotation = Quaternion.LookRotation(transform.position - position, Vector3.up);
-        _playerCamera = Instantiate(_playerCameraPrefab, position, rotation).GetComponent<IPlayerCamera>();
-
-        if (_playerCamera == null)
-            throw new System.Exception($"PlayerCameraPrefab doesnt have component PlayerCamera");
-
-        _playerCamera.Init(transform,transform);
+        _playerCamera = playerCamera;
     }
+
 
     #region Move event
     private void InvokeMoveEvent(Vector2 vector2)
     {
+        if (_playerCamera == null) return;
+
         vector2 = DirectionCameraRelated(vector2);
         OnMoveEvent?.Invoke(vector2);
     }
 
     private void InvokeMoveTouchEvent(Vector2 vector2)
     {
+        if (_playerCamera == null) return;
+
         // walk or run from touch
         // Vector normalized if vector.magnitude > 0.5
         // Otherwise half nomalized 
@@ -172,6 +161,10 @@ public class PlayerInputSystem : NetworkBehaviour
     {
         OnMoveEvent += callback;
     }
+    public void UnsubscribeMeFromMoveEvent(Vector2Event callback)
+    {
+        OnMoveEvent -= callback;
+    }
 
     /// <summary>
     /// Subscribe a method to Turn event (Vector2)
@@ -181,7 +174,10 @@ public class PlayerInputSystem : NetworkBehaviour
     {
         OnCameraRotateEvent += callback;
     }
-
+    public void UnsubscribeMeFromCameraTurnEvent(Vector3Event callback)
+    {
+        OnCameraRotateEvent -= callback;
+    }
 
     #region UnityEvents with no Params
     /// <summary>
@@ -212,6 +208,15 @@ public class PlayerInputSystem : NetworkBehaviour
         even?.AddListener(callback);
     }
 
+    public void UnsubscribeMeFromNoParamEvents(NoParamEvents noParamEvents, UnityAction callback)
+    {
+        UnityEvent even;
+        m_events.TryGetValue(noParamEvents, out even);
+
+        even?.RemoveListener(callback);
+    }
+
+
     /// <summary>
     /// Invoke event by enum name
     /// </summary>
@@ -239,6 +244,8 @@ public class PlayerInputSystem : NetworkBehaviour
 
     private void Update()// возможно бег в стороны надо вынести на класс движения и стороны должны зависить от поворота игрока, в случае с рут анимацией
     {
+        if (_playerCamera == null) return;
+
         // check if camera changed rotation. If true, triggers the event for who may concern
         if (_rotationEx != _playerCamera.GetTransform.rotation)
         {

@@ -8,5 +8,6 @@
     {
         UnityEngine.Transform GetTransform { get; }
         void Init(UnityEngine.Transform follow, UnityEngine.Transform lookAt);
+        void Destroy();
     }
 }

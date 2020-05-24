@@ -2292,10 +2292,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 815471c8bf31ec64097d99d7de0bd5c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  _playerCameraPrefab: {fileID: 2911003420734098360, guid: 8115a7990c498e543a728aadb0ae0575,
-    type: 3}
 --- !u!114 &7189531764086497059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2308,6 +2304,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eabdc6d0a705d9f46b500d13c8640ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _playerCameraPrefab: {fileID: 2911003420734098360, guid: 8115a7990c498e543a728aadb0ae0575,
+    type: 3}
 --- !u!114 &8796446743214438286
 MonoBehaviour:
   m_ObjectHideFlags: 0

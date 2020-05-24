@@ -84,5 +84,11 @@ namespace TheCamera
 
             return rezult;
         }
+
+        public void Destroy()
+        {
+            if (gameObject)
+                Destroy(gameObject);
+        }
     }
 }

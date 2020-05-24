@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace TheMove
@@ -75,6 +74,8 @@ namespace TheMove
 
         private void Update()
         {
+            if (!hasAuthority) return;
+
             // move
             Vector3 moveVelocity = GetTransform.InverseTransformDirection(_moveDirection);
             moveVelocity = Vector3.Lerp(_moveVelocityEx, moveVelocity, Time.deltaTime * _acceleration);
