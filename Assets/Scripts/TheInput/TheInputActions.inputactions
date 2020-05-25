@@ -22,6 +22,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "MoveJoy",
+                    "type": "Button",
+                    "id": "cf1ea746-7d22-4d74-bdba-502680821400",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "AttackUp",
                     "type": "Button",
                     "id": "e62f6975-cf46-4752-8668-13c0ebc97806",
@@ -49,6 +57,30 @@
                     "name": "AttackRt",
                     "type": "Button",
                     "id": "f275de0c-462f-497c-966e-07eb86ee2da2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "LookMouse",
+                    "type": "PassThrough",
+                    "id": "bcd7ce66-81ec-4c38-8fc3-0cc9d4315d17",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "LookTouch",
+                    "type": "PassThrough",
+                    "id": "56ea0226-a757-4ace-a267-feb6d3cc9bb5",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "LookJoy",
+                    "type": "Button",
+                    "id": "d98df8d3-fdac-4812-ac3c-9706cd31a382",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -217,6 +249,50 @@
                     "processors": "",
                     "groups": "Touch",
                     "action": "MoveTouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe13b17e-56d7-4024-a0b6-69bdef727639",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookTouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4f662d83-e329-4e64-b06a-53dbc05d5fa9",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookJoy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7c7b4975-5f76-4106-acf4-71ca4e888029",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveJoy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dc008bbe-153e-488c-941c-4878fcc5323d",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "LookMouse",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

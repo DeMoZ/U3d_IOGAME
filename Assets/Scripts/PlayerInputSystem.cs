@@ -75,6 +75,15 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
         _inputActions.PlayerControls.AttackDn.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackDn);
         _inputActions.PlayerControls.AttackLt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackLt);
         _inputActions.PlayerControls.AttackRt.performed += ctrl => InvokeNoParamEvents(NoParamEvents.AttackRt);
+
+        // test
+        _inputActions.PlayerControls.LookMouse.performed += cntx => InvokeLookEvent(cntx.ReadValue<Vector2>());
+        //_inputActions.PlayerControls.LookMouse.delta.x
+    }
+
+    private void InvokeLookEvent(Vector2 vector2)
+    {
+        Debug.Log($"InvokeLookEvent! value {vector2}");
     }
 
     /// <summary>
