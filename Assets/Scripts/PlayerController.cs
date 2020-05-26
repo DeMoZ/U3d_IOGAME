@@ -92,6 +92,23 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Helper class to subscribe iPlayerCamera inhereited class to move buttons events
+    /// </summary>
+    public class LookHelper
+    {
+        IPlayerCamera _iCamera;
+        public LookHelper(IPlayerCamera camera)
+        {
+            _iCamera = camera;
+        }
+
+        public void Rotate(Vector2 vector)
+        {
+            _iCamera.Rotate(vector);
+        }
+    }
+
     private void Start()
     {
 
@@ -132,6 +149,7 @@ public class PlayerController : NetworkBehaviour
 
         _playerCamera.Init(transform, transform);
 
+
     }
 
     private void SubscribeToEvents()
@@ -146,6 +164,9 @@ public class PlayerController : NetworkBehaviour
         GetPlayerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackDn, GetAttackQueueAction.AttackDn);
         GetPlayerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackLt, GetAttackQueueAction.AttackLt);
         GetPlayerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackRt, GetAttackQueueAction.AttackRt);
+
+        // subscribe camera on look attempt event
+        GetPlayerInputSystem.SubscribeMeOnLookEvent(GetPlayerCamera.Rotate); 
     }
 
     private void UnsubscribeFromEvents()
@@ -160,6 +181,9 @@ public class PlayerController : NetworkBehaviour
         GetPlayerInputSystem.UnsubscribeMeFromNoParamEvents(PlayerInputSystem.NoParamEvents.AttackDn, GetAttackQueueAction.AttackDn);
         GetPlayerInputSystem.UnsubscribeMeFromNoParamEvents(PlayerInputSystem.NoParamEvents.AttackLt, GetAttackQueueAction.AttackLt);
         GetPlayerInputSystem.UnsubscribeMeFromNoParamEvents(PlayerInputSystem.NoParamEvents.AttackRt, GetAttackQueueAction.AttackRt);
+
+        // unsubscribe camera on look attempt event
+        GetPlayerInputSystem.UnsubscribeMeFromLookEvent(GetPlayerCamera.Rotate);
     }
 
     private void OnEnable()

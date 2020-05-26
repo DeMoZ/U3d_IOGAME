@@ -13,10 +13,10 @@ namespace TheCamera
     public class PlayerCamera : MonoBehaviour, IPlayerCamera
     {
         [Tooltip("Dumpling of following offset. w - for YAW (y rotation)")]
-        [SerializeField] Vector3 _followingOffset = new Vector3(0, 3.54f, -4);
+        [SerializeField] UnityEngine.Vector3 _followingOffset = new UnityEngine.Vector3(0, 3.54f, -4);
 
         [Tooltip("Dumpling of following offset. w - for YAW (y rotation)")]
-        [SerializeField] Vector4 _followingOffsetDumpling = new Vector4(1, 5, 3, 0);
+        [SerializeField] UnityEngine.Vector4 _followingOffsetDumpling = new UnityEngine.Vector4(1, 5, 3, 0);
 
         private Transform _transform;
         public Transform GetTransform => _transform;
@@ -35,6 +35,8 @@ namespace TheCamera
 
         public void Init(Transform follow, Transform lookAt)
         {
+            Debug.Log("Camera Created");
+
             GetCmCamera.Follow = follow;
             GetCmCamera.LookAt = lookAt;
 
@@ -52,7 +54,7 @@ namespace TheCamera
             _transposer.m_ZDamping = _followingOffsetDumpling.z;
             _transposer.m_YawDamping = _followingOffsetDumpling.w;
 
-            _composer.m_TrackedObjectOffset = new Vector3(_composer.m_TrackedObjectOffset.x,
+            _composer.m_TrackedObjectOffset = new UnityEngine.Vector3(_composer.m_TrackedObjectOffset.x,
                                                             heigh,
                                                             _composer.m_TrackedObjectOffset.z);
         }
@@ -89,6 +91,13 @@ namespace TheCamera
         {
             if (gameObject)
                 Destroy(gameObject);
+        }
+
+        public void Rotate(Vector2 vector)
+        {
+            _transposer.m_FollowOffset.y += vector.y*Time.deltaTime;
+
+           // Debug.Log($"Rotate . _transposer{_transposer.m_YDamping } ; vector {vector}");
         }
     }
 }
