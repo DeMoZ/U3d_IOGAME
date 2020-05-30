@@ -97,7 +97,7 @@ namespace TheCamera
         {
             _transposer.m_FollowOffset.y += vector.y*Time.deltaTime;
 
-           // Debug.Log($"Rotate . _transposer{_transposer.m_YDamping } ; vector {vector}");
+          // Debug.Log($"Rotate . _transposer{_transposer.m_YDamping } ; vector {vector}");
         }
     }
 }

@@ -28,8 +28,10 @@ public class PlayerController : NetworkBehaviour
         get
         {
             if (_playerCamera == null)
+            {
                 InitCamera();
-
+                GetPlayerInputSystem.Init(GetPlayerCamera);
+            }
             return _playerCamera;
         }
     }
@@ -114,25 +116,25 @@ public class PlayerController : NetworkBehaviour
 
 
         //if (isLocalPlayer)
-        if (!hasAuthority) return;
+        //if (!hasAuthority) return;
 
-        Init();
+        //Init();
     }
 
-    private void Init()
-    {
-#if INSTALL_CAMERA
+    //    private void Init()
+    //    {
+    //#if INSTALL_CAMERA
 
-        InitCamera();
-#else
-        _cameraT = Camera.main.transform;
-#endif
+    //        InitCamera();
+    //#else
+    //        _cameraT = Camera.main.transform;
+    //#endif
 
-        // if (isLocalPlayer)
-        GetPlayerInputSystem.Init(GetPlayerCamera);
+    //        // if (isLocalPlayer)
+    //        GetPlayerInputSystem.Init(GetPlayerCamera);
 
-        //SubscribeToEvents();
-    }
+    //        //SubscribeToEvents();
+    //    }
 
     private void InitCamera()
     {
@@ -156,9 +158,11 @@ public class PlayerController : NetworkBehaviour
     {
         MoveHelper moveHelper = new MoveHelper(GetMove);
 
-        GetPlayerInputSystem.SubscribeMeOnMoveEvent(moveHelper.Move);
+        //GetPlayerInputSystem.SubscribeMeOnMoveEvent(moveHelper.Move);
+        GetPlayerInputSystem.SubscribeMeOnVector2Event(PlayerInputSystem.EventsV2enum.Move, moveHelper.Move);
 
-        GetPlayerInputSystem.SubscribeMeOnCameraTurnEvent(moveHelper.Turn);
+         GetPlayerInputSystem.SubscribeMeOnCameraTurnEvent(moveHelper.Turn);
+        //GetPlayerInputSystem.SubscribeMeOnVector2Event(PlayerInputSystem.EventsV2enum.Turn,moveHelper.Turn);
 
         GetPlayerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackUp, GetAttackQueueAction.AttackUp);
         GetPlayerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackDn, GetAttackQueueAction.AttackDn);
@@ -166,16 +170,19 @@ public class PlayerController : NetworkBehaviour
         GetPlayerInputSystem.SubscribeMeOnNoParamEvents(PlayerInputSystem.NoParamEvents.AttackRt, GetAttackQueueAction.AttackRt);
 
         // subscribe camera on look attempt event
-        GetPlayerInputSystem.SubscribeMeOnLookEvent(GetPlayerCamera.Rotate); 
+        //GetPlayerInputSystem.SubscribeMeOnLookEvent(GetPlayerCamera.Rotate);
+        GetPlayerInputSystem.SubscribeMeOnVector2Event(PlayerInputSystem.EventsV2enum.Look, GetPlayerCamera.Rotate);
     }
 
     private void UnsubscribeFromEvents()
     {
         MoveHelper moveHelper = new MoveHelper(GetMove);
 
-        GetPlayerInputSystem.UnsubscribeMeFromMoveEvent(moveHelper.Move);
+        // GetPlayerInputSystem.UnsubscribeMeFromMoveEvent(moveHelper.Move);
+        GetPlayerInputSystem.UnsubscribeMeFromVector2Event(PlayerInputSystem.EventsV2enum.Move, moveHelper.Move);
 
         GetPlayerInputSystem.UnsubscribeMeFromCameraTurnEvent(moveHelper.Turn);
+        //GetPlayerInputSystem.UnsubscribeMeFromVector2Event(PlayerInputSystem.EventsV2enum.Turn, moveHelper.Turn);
 
         GetPlayerInputSystem.UnsubscribeMeFromNoParamEvents(PlayerInputSystem.NoParamEvents.AttackUp, GetAttackQueueAction.AttackUp);
         GetPlayerInputSystem.UnsubscribeMeFromNoParamEvents(PlayerInputSystem.NoParamEvents.AttackDn, GetAttackQueueAction.AttackDn);
@@ -183,7 +190,8 @@ public class PlayerController : NetworkBehaviour
         GetPlayerInputSystem.UnsubscribeMeFromNoParamEvents(PlayerInputSystem.NoParamEvents.AttackRt, GetAttackQueueAction.AttackRt);
 
         // unsubscribe camera on look attempt event
-        GetPlayerInputSystem.UnsubscribeMeFromLookEvent(GetPlayerCamera.Rotate);
+        //GetPlayerInputSystem.UnsubscribeMeFromLookEvent(GetPlayerCamera.Rotate);
+        GetPlayerInputSystem.UnsubscribeMeFromVector2Event(PlayerInputSystem.EventsV2enum.Look, GetPlayerCamera.Rotate);        
     }
 
     private void OnEnable()
