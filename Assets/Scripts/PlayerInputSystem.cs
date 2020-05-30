@@ -15,16 +15,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
 {
     public delegate void EventV2(Vector2 vector2);
     public delegate void EventV3(Vector3 vector3);
-    ///// <summary>
-    ///// Event invoked on Move Arrows pressed
-    ///// </summary>
-    //public EventV2 OnMoveEvent;
-
-    ///// <summary>
-    /////  event invoked on attempt to look (Rotate Camera)
-    ///// </summary>
-    //public EventV2 OnLookEvent;
-
+   
     /// <summary>
     /// Event invoked on Camera rotate
     /// </summary>
@@ -33,7 +24,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     /// <summary>
     /// All no parameters events 
     /// </summary>
-    public enum NoParamEvents
+    public enum EventsNoParamEnum
     {
         AttackUp,
         AttackDn,
@@ -42,9 +33,24 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     }
 
     /// <summary>
+    /// All Vector2 Events
+    /// </summary>
+    public enum EventsV2Enum
+    {
+        Look,
+        Move,
+        Turn,
+    }
+
+    /// <summary>
     /// Dictionary for events with no params related to NoParamEvents enum
     /// </summary>
-    public Dictionary<NoParamEvents, UnityEvent> _events = new Dictionary<NoParamEvents, UnityEvent>();
+    public Dictionary<EventsNoParamEnum, UnityEvent> _events = new Dictionary<EventsNoParamEnum, UnityEvent>();
+
+    /// <summary>
+    /// Dictionary for vector2 events related to Vector2Events enum
+    /// </summary>
+    public Dictionary<EventsV2Enum, EventV2> _eventsVector2 = new Dictionary<EventsV2Enum, EventV2>();
 
     /// <summary>
     /// Player Camera script on the camera that follows player body
@@ -55,8 +61,6 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     /// the input action file with all actions presets
     /// </summary>
     private TheInputActions _inputActions;
-
-    private Vector3 _direction = Vector3.zero;
 
     /// <summary>
     /// Input vector2.magnitude limit from touch move control (separates move and run)
@@ -72,20 +76,15 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     {
         _inputActions = new TheInputActions();
 
-        //_inputActions.PlayerControls.Move.performed += cntx => InvokeMoveEvent(cntx.ReadValue<Vector2>());
-        _inputActions.PlayerControls.Move.performed += cntx => InvokeEventV2(EventsV2enum.Move, cntx.ReadValue<Vector2>());
+        _inputActions.PlayerControls.Move.performed += cntx => InvokeEventV2(EventsV2Enum.Move, cntx.ReadValue<Vector2>());
         _inputActions.PlayerControls.MoveTouch.performed += cntx => InvokeMoveTouchEvent(cntx.ReadValue<Vector2>());
 
-        //_inputActions.PlayerControls.MouseMove.performed += cntx => InvokeMouseMoveEvent(cntx.ReadValue<Vector2>());
+        _inputActions.PlayerControls.AttackUp.performed += ctrl => InvokeUnityEventNoParam(EventsNoParamEnum.AttackUp);
+        _inputActions.PlayerControls.AttackDn.performed += ctrl => InvokeUnityEventNoParam(EventsNoParamEnum.AttackDn);
+        _inputActions.PlayerControls.AttackLt.performed += ctrl => InvokeUnityEventNoParam(EventsNoParamEnum.AttackLt);
+        _inputActions.PlayerControls.AttackRt.performed += ctrl => InvokeUnityEventNoParam(EventsNoParamEnum.AttackRt);
 
-        _inputActions.PlayerControls.AttackUp.performed += ctrl => InvokeEventNoParam(NoParamEvents.AttackUp);
-        _inputActions.PlayerControls.AttackDn.performed += ctrl => InvokeEventNoParam(NoParamEvents.AttackDn);
-        _inputActions.PlayerControls.AttackLt.performed += ctrl => InvokeEventNoParam(NoParamEvents.AttackLt);
-        _inputActions.PlayerControls.AttackRt.performed += ctrl => InvokeEventNoParam(NoParamEvents.AttackRt);
-
-        // Look
-        _inputActions.PlayerControls.LookMouse.performed += cntx => InvokeLookEvent(cntx.ReadValue<Vector2>());
-
+        _inputActions.PlayerControls.LookMouse.performed += cntx => InvokeEventV2(EventsV2Enum.Look,cntx.ReadValue<Vector2>());
     }
 
     /// <summary>
@@ -98,14 +97,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
 
 
     #region Move event
-    //private void InvokeMoveEvent(Vector2 vector2)
-    //{
-    //    if (_playerCamera == null) return;
-
-    //    vector2 = DirectionCameraRelated(vector2);
-    //    OnMoveEvent?.Invoke(vector2);
-    //}
-
+  
     /// <summary>
     /// THe metod under conctruction
     /// </summary>
@@ -168,37 +160,9 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     }
 
     #endregion
-
-    #region Look
-    private void InvokeLookEvent(Vector2 vector2)
-    {
-        //        Debug.Log($"InvokeLookEvent! value {vector2}");
-        //OnLookEvent?.Invoke(vector2);
-
-        InvokeEventV2(EventsV2enum.Look, vector2);
-    }
-
-    #endregion
-
-    #region Subscribe
-    ///// <summary>
-    ///// Subscribe a method to move event (Vector2)
-    ///// </summary>
-    ///// <param name="callback"></param>
-    //public void SubscribeMeOnMoveEvent(EventV2 callback)
-    //{
-    //    OnMoveEvent += callback;
-    //}
-
-    // /// <summary>
-    /// Subscribe a method to Look event (Vector2)
-    /// </summary>
-    /// <param name="callback"></param>
-    //public void SubscribeMeOnLookEvent(EventV2 callback)
-    //{
-    //    OnLookEvent += callback;
-    //}
-
+        
+    #region Turn
+  
     /// <summary>
     /// Subscribe a method to Turn event (Vector2)
     /// </summary>
@@ -207,43 +171,22 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     {
         OnCameraRotateEvent += callback;
     }
-
-    #endregion
-
-
-    #region Unsubscribe
-    //public void UnsubscribeMeFromMoveEvent(EventV2 callback)
-    //{
-    //    OnMoveEvent -= callback;
-    //}
-
-    //public void UnsubscribeMeFromLookEvent(EventV2 callback)
-    //{
-    //    OnLookEvent -= callback;
-    //}
-
+       
     public void UnsubscribeMeFromCameraTurnEvent(EventV3 callback)
     {
         OnCameraRotateEvent -= callback;
     }
     #endregion
 
-
-
-
-
-
-
-
     #region UnityEvents with no Params
     /// <summary>
     /// Adds events into dictionary. Key is enum variables
     /// </summary>
-    private void FillUpDictionaryNoPatamEvents()
+    private void FillUpDictionaryUnityEventsNoPatam()
     {
-        foreach (var e in (NoParamEvents.GetValues(typeof(NoParamEvents))))
+        foreach (var e in (EventsNoParamEnum.GetValues(typeof(EventsNoParamEnum))))
         {
-            _events.Add((NoParamEvents)e, new UnityEvent());
+            _events.Add((EventsNoParamEnum)e, new UnityEvent());
         }
         // Debug.Log("Event dictionary filled");
     }
@@ -253,10 +196,10 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     /// </summary>
     /// <param name="noParamEvents"></param>
     /// <param name="callback"></param>
-    public void SubscribeMeOnNoParamEvents(NoParamEvents noParamEvents, UnityAction callback)
+    public void SubscribeUnityEventsNoParam(EventsNoParamEnum noParamEvents, UnityAction callback)
     {
         if (_events.Count == 0)
-            FillUpDictionaryNoPatamEvents();
+            FillUpDictionaryUnityEventsNoPatam();
 
         UnityEvent even;
         _events.TryGetValue(noParamEvents, out even);
@@ -264,7 +207,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
         even?.AddListener(callback);
     }
 
-    public void UnsubscribeMeFromNoParamEvents(NoParamEvents noParamEvents, UnityAction callback)
+    public void UnsubscribeUnityEventsNoParam(EventsNoParamEnum noParamEvents, UnityAction callback)
     {
         UnityEvent even;
         _events.TryGetValue(noParamEvents, out even);
@@ -276,7 +219,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     /// Invoke event by enum name
     /// </summary>
     /// <param name="noParamEvents"></param>
-    public void InvokeEventNoParam(NoParamEvents noParamEvents)
+    public void InvokeUnityEventNoParam(EventsNoParamEnum noParamEvents)
     {
         UnityEvent even;
         _events.TryGetValue(noParamEvents, out even);
@@ -286,7 +229,43 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
 
     #endregion
 
+    #region Events with Vector2
+    private void FillUpDictionaryEventsV2()
+    {
+        foreach (var e in (EventsV2Enum.GetValues(typeof(EventsV2Enum))))
+        {
+            _eventsVector2.Add((EventsV2Enum)e, (Vector2) => { });
+        }
+    }
 
+    public void SubscribeVector2Event(EventsV2Enum vector2enum, EventV2 callback)
+    {
+        if (_eventsVector2.Count == 0)
+            FillUpDictionaryEventsV2();
+
+        string str = "";
+        foreach (var k in _eventsVector2)
+            str += k.Key.ToString() + " ; ";
+
+        _eventsVector2[vector2enum] += callback;
+    }
+    public void UnsubscribeVector2Event(EventsV2Enum vector2enum, EventV2 callback)
+    {
+        EventV2 even;
+        _eventsVector2.TryGetValue(vector2enum, out even);
+
+        if (even != null)
+            even -= callback;
+    }
+
+    private void InvokeEventV2(EventsV2Enum enu, Vector2 vector)
+    {
+        EventV2 even;
+        _eventsVector2.TryGetValue(enu, out even);
+        even?.Invoke(vector);
+    }
+
+    #endregion
 
     private void OnEnable()
     {
@@ -296,10 +275,6 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     private void OnDisable()
     {
         _inputActions.Disable();
-    }
-
-    private void Start()
-    {
     }
 
     private void Update()// возможно бег в стороны надо вынести на класс движения и стороны должны зависить от поворота игрока, в случае с рут анимацией
@@ -315,85 +290,12 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
 
             _rotationEx = _playerCamera.GetTransform.rotation;
         }
-    }
-
-    /// <summary>
-    /// Triggers event with difference in degrees bitween camera forward and body forward
-    /// </summary>
-    private void TurnBodyToCameraForward()
-    {
-
-    }
+    }   
 
     //----------------in Progress
 
 
-    /// <summary>
-    /// All Vector2 Events
-    /// </summary>
-    public enum EventsV2enum
-    {
-        Look,
-        Move,
-        Turn,
-    }
-    /// <summary>
-    /// Dictionary for vector2 events related to Vector2Events enum
-    /// </summary>
-    public Dictionary<EventsV2enum, EventV2> _eventsVector2 = new Dictionary<EventsV2enum, EventV2>();
-    public void SubscribeMeOnVector2Event(EventsV2enum vector2enum, EventV2 callback)
-    {
-        if (_eventsVector2.Count == 0)
-            FillUpDictionaryVector2Events();
-
-        string str = "";
-        foreach (var k in _eventsVector2)
-            str += k.Key.ToString() + " ; ";
-
-       // Debug.Log($" {str}  and request for {vector2enum}");
-
-        //EventV2 even;
-        //_eventsVector2.TryGetValue(vector2Events, out even);
-
-        //if (even != null)
-        //    even += callback;
-
-
-
-        // _eventsVector2[EventsV2enum.Look] += () => { callback };
-        _eventsVector2[vector2enum] += callback;
-
-    }
-    public void UnsubscribeMeFromVector2Event(EventsV2enum vector2enum, EventV2 callback)
-    {
-        EventV2 even;
-        _eventsVector2.TryGetValue(vector2enum, out even);
-
-        if (even != null)
-            even -= callback;
-    }
-
-    //public Dictionary<EventsV2enum, EventV2> _eventsV2 = new Dictionary<EventsV2enum, EventV2>();
-    private void FillUpDictionaryVector2Events()
-    {
-        foreach (var e in (EventsV2enum.GetValues(typeof(EventsV2enum))))
-        {
-            _eventsVector2.Add((EventsV2enum)e, (Vector2) => { });
-
-            Debug.Log($"added {e.ToString()}");
-        }
-
-
-    }
-
-    private void InvokeEventV2(EventsV2enum enu, Vector2 vector)
-    {
-        //  Debug.Log($"InvokeEventV2 enu {enu} ; value {value}");
-        EventV2 even;
-        _eventsVector2.TryGetValue(enu, out even);
-
-        //Debug.Log($"InvokeEventV2 even != null ( {even != null} )");
-
-        even?.Invoke(vector);
-    }
+   
+  
+   
 }
