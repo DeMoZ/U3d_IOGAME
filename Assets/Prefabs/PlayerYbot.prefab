@@ -2306,7 +2306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _playerCameraPrefab: {fileID: 2911003420734098360, guid: 8115a7990c498e543a728aadb0ae0575,
+  _playerCameraPrefab: {fileID: 1653233568669494290, guid: a39a0082439cee347869a12cb2a3002e,
     type: 3}
 --- !u!114 &8796446743214438286
 MonoBehaviour:

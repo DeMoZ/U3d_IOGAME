@@ -7,9 +7,9 @@ using UnityEngine;
 namespace TheCamera
 {
     /// <summary>
-    /// Camera Setup Script based on Cinemachine virtual camera. The component CinemachineVirtualCamera is required on the camera
+    /// Camera Setup Script based on Cinemachine Free Look. The component CinemachineVirtualCamera is required on the camera
     /// </summary>
-    [RequireComponent(typeof(CinemachineVirtualCamera))]
+    [RequireComponent(typeof(CinemachineFreeLook))]
     public class PlayerCamera : MonoBehaviour, IPlayerCamera
     {
         [Tooltip("Dumpling of following offset. w - for YAW (y rotation)")]
@@ -21,39 +21,51 @@ namespace TheCamera
         private Transform _transform;
         public Transform GetTransform => _transform;
 
-        private CinemachineVirtualCamera _cmCamera;
-        public CinemachineVirtualCamera GetCmCamera => _cmCamera;
+        private CinemachineFreeLook _cmCamera;
+        public CinemachineFreeLook GetCmCamera => _cmCamera;
 
-        private CinemachineTransposer _transposer;
+        private CinemachineOrbitalTransposer _transposer;
         private CinemachineComposer _composer;
 
         private void Awake()
         {
             _transform = transform;
-            _cmCamera = GetComponent<CinemachineVirtualCamera>();
+            _cmCamera = GetComponent<CinemachineFreeLook>();
         }
 
         public void Init(Transform follow, Transform lookAt)
         {
-            Debug.Log("Camera Created");
+            Debug.Log($"Camera Created, follow {follow} ; lookAt {lookAt}");
 
             GetCmCamera.Follow = follow;
             GetCmCamera.LookAt = lookAt;
 
             float heigh = GetHeigh(lookAt);
 
+            // Heights and radiused of rings
+            // GetCmCamera.m_Orbits[0].m_Height = heigh;
+            // GetCmCamera.m_Orbits[0].m_Radius=
+            // GetCmCamera.m_Orbits[1].m_Height = heigh;
+            // GetCmCamera.m_Orbits[1].m_Radius =
+            // GetCmCamera.m_Orbits[2].m_Height = heigh;
+            //GetCmCamera.m_Orbits[2].m_Radius =
+
+
+
+            //GetCmCamera.GetRig()
             // cashing
-            _transposer = GetCmCamera.GetCinemachineComponent<CinemachineTransposer>();
-            _composer = GetCmCamera.GetCinemachineComponent<CinemachineComposer>();
+            // _transposer = GetCmCamera.GetCinemachineComponent<CinemachineOrbitalTransposer>();
+            //  _composer = GetCmCamera.GetCinemachineComponent<CinemachineComposer>();
 
             // setting offsets
-            _transposer.m_FollowOffset = _followingOffset;
+            //_transposer.m_FollowOffset = _followingOffset;
 
-            _transposer.m_XDamping = _followingOffsetDumpling.x;
-            _transposer.m_YDamping = _followingOffsetDumpling.y;
-            _transposer.m_ZDamping = _followingOffsetDumpling.z;
-            _transposer.m_YawDamping = _followingOffsetDumpling.w;
+            //_transposer.m_XDamping = _followingOffsetDumpling.x;
+            //_transposer.m_YDamping = _followingOffsetDumpling.y;
+            //_transposer.m_ZDamping = _followingOffsetDumpling.z;
+            //_transposer.m_YawDamping = _followingOffsetDumpling.w;
 
+            return;
             _composer.m_TrackedObjectOffset = new UnityEngine.Vector3(_composer.m_TrackedObjectOffset.x,
                                                             heigh,
                                                             _composer.m_TrackedObjectOffset.z);
@@ -95,9 +107,8 @@ namespace TheCamera
 
         public void Rotate(Vector2 vector)
         {
-            _transposer.m_FollowOffset.y += vector.y*Time.deltaTime;
+            // _transposer.m_FollowOffset.y += vector.y * Time.deltaTime;
 
-          // Debug.Log($"Rotate . _transposer{_transposer.m_YDamping } ; vector {vector}");
         }
     }
 }
