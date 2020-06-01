@@ -12,11 +12,19 @@ namespace TheCamera
     [RequireComponent(typeof(CinemachineFreeLook))]
     public class PlayerCamera : MonoBehaviour, IPlayerCamera
     {
+        //[Tooltip("Camera rotation speed")]
+        //[SerializeField] Vector2 _speed = new Vector2(1, 0.01f);
+
+        [Tooltip("Recalculate rigs heights if checked")]
+        [SerializeField] bool _calculateRigsHeight = false;
+
+        [Header("Depricated")]
         [Tooltip("Dumpling of following offset. w - for YAW (y rotation)")]
         [SerializeField] UnityEngine.Vector3 _followingOffset = new UnityEngine.Vector3(0, 3.54f, -4);
 
         [Tooltip("Dumpling of following offset. w - for YAW (y rotation)")]
         [SerializeField] UnityEngine.Vector4 _followingOffsetDumpling = new UnityEngine.Vector4(1, 5, 3, 0);
+
 
         private Transform _transform;
         public Transform GetTransform => _transform;
@@ -24,8 +32,8 @@ namespace TheCamera
         private CinemachineFreeLook _cmCamera;
         public CinemachineFreeLook GetCmCamera => _cmCamera;
 
-        private CinemachineOrbitalTransposer _transposer;
-        private CinemachineComposer _composer;
+        //  private CinemachineOrbitalTransposer _transposer;
+        //  private CinemachineComposer _composer;
 
         private void Awake()
         {
@@ -40,16 +48,19 @@ namespace TheCamera
             GetCmCamera.Follow = follow;
             GetCmCamera.LookAt = lookAt;
 
+            // set rigs
             float heigh = GetHeigh(lookAt);
 
-            // Heights and radiused of rings
-            // GetCmCamera.m_Orbits[0].m_Height = heigh;
-            // GetCmCamera.m_Orbits[0].m_Radius=
-            // GetCmCamera.m_Orbits[1].m_Height = heigh;
-            // GetCmCamera.m_Orbits[1].m_Radius =
-            // GetCmCamera.m_Orbits[2].m_Height = heigh;
-            //GetCmCamera.m_Orbits[2].m_Radius =
-
+            if (_calculateRigsHeight)
+            {
+                // Heights and radiused of rings
+                GetCmCamera.m_Orbits[0].m_Height = heigh + 0.2f;
+                GetCmCamera.m_Orbits[1].m_Height = heigh / 2;
+                GetCmCamera.m_Orbits[2].m_Height = heigh / 6;
+                // GetCmCamera.m_Orbits[0].m_Radius=
+                // GetCmCamera.m_Orbits[1].m_Radius =
+                // GetCmCamera.m_Orbits[2].m_Radius =
+            }
 
 
             //GetCmCamera.GetRig()
@@ -65,10 +76,9 @@ namespace TheCamera
             //_transposer.m_ZDamping = _followingOffsetDumpling.z;
             //_transposer.m_YawDamping = _followingOffsetDumpling.w;
 
-            return;
-            _composer.m_TrackedObjectOffset = new UnityEngine.Vector3(_composer.m_TrackedObjectOffset.x,
-                                                            heigh,
-                                                            _composer.m_TrackedObjectOffset.z);
+            //_composer.m_TrackedObjectOffset = new UnityEngine.Vector3(_composer.m_TrackedObjectOffset.x,
+            //                                                heigh,
+            //                                                _composer.m_TrackedObjectOffset.z);
         }
 
         private float GetHeigh(Transform other)
@@ -107,8 +117,8 @@ namespace TheCamera
 
         public void Rotate(Vector2 vector)
         {
-            // _transposer.m_FollowOffset.y += vector.y * Time.deltaTime;
-
+            GetCmCamera.m_YAxis.Value += vector.y * Time.deltaTime;// * _speed.y;
+            GetCmCamera.m_XAxis.Value += vector.x * Time.deltaTime;// * _speed.x;
         }
     }
 }

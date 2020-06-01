@@ -733,9 +733,9 @@ MonoBehaviour:
     m_Radius: 1.41
   m_LegacyHeadingBias: 3.4028235e+38
   m_Rigs:
-  - {fileID: 1653233567628583960}
-  - {fileID: 1653233567466830025}
-  - {fileID: 1653233568023402364}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &8462616056191693282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -750,3 +750,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _followingOffset: {x: 0, y: 3.54, z: -4}
   _followingOffsetDumpling: {x: 1, y: 5, z: 3, w: 0}
+  speed: {x: 100, y: 0.001}
