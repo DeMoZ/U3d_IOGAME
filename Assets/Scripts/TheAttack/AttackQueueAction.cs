@@ -120,7 +120,7 @@ namespace TheAttack
                 default:
 
                     if (!_ignoreAttack) // and if attak direction pussible
-                        RpcAttack();
+                        RpcAttackUp();
 
                     break;
             }
@@ -137,7 +137,7 @@ namespace TheAttack
 
 
         [ClientRpc]
-        void RpcAttack()
+        void RpcAttackUp()
         {
             GetAnimator.SetTrigger("AttackUp");
         }
