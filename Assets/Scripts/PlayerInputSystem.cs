@@ -15,7 +15,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
 {
     public delegate void EventV2(Vector2 vector2);
     public delegate void EventV3(Vector3 vector3);
-   
+
     /// <summary>
     /// Event invoked on Camera rotate
     /// </summary>
@@ -84,7 +84,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
         _inputActions.PlayerControls.AttackLt.performed += ctrl => InvokeUnityEventNoParam(EventsNoParamEnum.AttackLt);
         _inputActions.PlayerControls.AttackRt.performed += ctrl => InvokeUnityEventNoParam(EventsNoParamEnum.AttackRt);
 
-        _inputActions.PlayerControls.LookMouse.performed += cntx => InvokeEventV2(EventsV2Enum.Look,cntx.ReadValue<Vector2>());
+        _inputActions.PlayerControls.LookMouse.performed += cntx => InvokeEventV2(EventsV2Enum.Look, cntx.ReadValue<Vector2>());
     }
 
     /// <summary>
@@ -97,7 +97,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
 
 
     #region Move event
-  
+
     /// <summary>
     /// THe metod under conctruction
     /// </summary>
@@ -160,9 +160,9 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     }
 
     #endregion
-        
+
     #region Turn
-  
+
     /// <summary>
     /// Subscribe a method to Turn event (Vector2)
     /// </summary>
@@ -171,7 +171,7 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     {
         OnCameraRotateEvent += callback;
     }
-       
+
     public void UnsubscribeMeFromCameraTurnEvent(EventV3 callback)
     {
         OnCameraRotateEvent -= callback;
@@ -216,6 +216,17 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     }
 
     /// <summary>
+    /// unsubscribes all callbacks from event by enum name
+    /// </summary>
+    /// <param name="noParamEvents"></param>
+    private void UnsubscribeUnityEventsNoParam(EventsNoParamEnum noParamEvents)
+    {
+        UnityEvent even;
+        _events.TryGetValue(noParamEvents, out even);
+
+        even?.RemoveAllListeners();
+    }
+    /// <summary>
     /// Invoke event by enum name
     /// </summary>
     /// <param name="noParamEvents"></param>
@@ -258,6 +269,19 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
             even -= callback;
     }
 
+    /// <summary>
+    /// unsubscribes all callbacks from event by enum name
+    /// </summary>
+    /// <param name="vector2enum"></param>
+    private void UnsubscribeVector2Event(EventsV2Enum vector2enum)
+    {
+        EventV2 even;
+        _eventsVector2.TryGetValue(vector2enum, out even);
+
+        if (even != null)
+            even = null;
+    }
+
     private void InvokeEventV2(EventsV2Enum enu, Vector2 vector)
     {
         EventV2 even;
@@ -266,6 +290,15 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
     }
 
     #endregion
+
+    public void UnsubscribeAll()
+    {
+        foreach (var e in (EventsV2Enum.GetValues(typeof(EventsV2Enum))))
+            UnsubscribeVector2Event((EventsV2Enum)e);
+
+        foreach (var e in (EventsNoParamEnum.GetValues(typeof(EventsNoParamEnum))))
+            UnsubscribeUnityEventsNoParam((EventsNoParamEnum)e);
+    }
 
     private void OnEnable()
     {
@@ -290,12 +323,12 @@ public class PlayerInputSystem : MonoBehaviour// NetworkBehaviour
 
             _rotationEx = _playerCamera.GetTransform.rotation;
         }
-    }   
+    }
 
     //----------------in Progress
 
 
-   
-  
-   
+
+
+
 }

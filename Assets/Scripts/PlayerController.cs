@@ -1,5 +1,4 @@
-﻿#define INSTALL_CAMERA
-
+﻿//#define INSTALL_CAMERA
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,38 +14,37 @@ using Mirror;
 [DisallowMultipleComponent]
 
 [RequireComponent(typeof(AttackQueueAction))]
-[RequireComponent(typeof(PlayerInputSystem))]
-//[RequireComponent(typeof(IMoveController))]
-public class PlayerController : NetworkBehaviour
+[RequireComponent(typeof(IMove))]
+public class PlayerController : NetworkBehaviour, IControllable
 {
-#if INSTALL_CAMERA
-    [SerializeField] GameObject _playerCameraPrefab;
-#endif
+    //#if INSTALL_CAMERA
+    //    [SerializeField] GameObject _playerCameraPrefab;
+    //#endif
     IPlayerCamera _playerCamera;
-    private IPlayerCamera GetPlayerCamera
-    {
-        get
-        {
-            if (_playerCamera == null)
-            {
-                InitCamera();
-                GetPlayerInputSystem.Init(GetPlayerCamera);
-            }
-            return _playerCamera;
-        }
-    }
+    private IPlayerCamera GetPlayerCamera => _playerCamera;
+    //{
+    //    get
+    //    {
+    //        if (_playerCamera == null)
+    //        {
+    //            InitCamera();
+    //            GetPlayerInputSystem.Init(GetPlayerCamera);
+    //        }
+    //        return _playerCamera;
+    //    }
+    //}
 
     private PlayerInputSystem _playerInputSystem;
-    private PlayerInputSystem GetPlayerInputSystem
-    {
-        get
-        {
-            if (!_playerInputSystem)
-                _playerInputSystem = GetComponent<PlayerInputSystem>();
+    private PlayerInputSystem GetPlayerInputSystem => _playerInputSystem;
+    //{
+    //    get
+    //    {
+    //        if (!_playerInputSystem)
+    //            _playerInputSystem = GetComponent<PlayerInputSystem>();
 
-            return _playerInputSystem;
-        }
-    }
+    //        return _playerInputSystem;
+    //    }
+    //}
 
     private AttackQueueAction _attackQueueAction;
     private AttackQueueAction GetAttackQueueAction
@@ -69,6 +67,18 @@ public class PlayerController : NetworkBehaviour
                 _iMove = GetComponent<IMove>();
 
             return _iMove;
+        }
+    }
+
+    MoveHelper _moveHelper;
+    MoveHelper GetMoveHelper
+    {
+        get
+        {
+            if (_moveHelper == null)
+                _moveHelper = new MoveHelper(GetMove);
+
+            return _moveHelper;
         }
     }
 
@@ -112,29 +122,40 @@ public class PlayerController : NetworkBehaviour
     }
 
 
-    private void InitCamera()
+    //private void InitCamera()
+    //{
+    //    if (!_playerCameraPrefab)
+    //        throw new System.Exception($"_ Camera prefab not set for {this}");
+
+    //    // instantiate player camera
+    //    Vector3 position = Vector3.zero;
+    //    Quaternion rotation = Quaternion.LookRotation(transform.position - position, Vector3.up);
+    //    _playerCamera = Instantiate(_playerCameraPrefab, position, rotation).GetComponent<IPlayerCamera>();
+
+    //    if (_playerCamera == null)
+    //        throw new System.Exception($"PlayerCameraPrefab doesnt have component PlayerCamera");
+
+    //    _playerCamera.Init(transform, transform);
+    //}
+    private void Awake()
     {
-        if (!_playerCameraPrefab)
-            throw new System.Exception($"_ Camera prefab not set for {this}");
+        if (!isLocalPlayer) return;
 
-        // instantiate player camera
-        Vector3 position = Vector3.zero;
-        Quaternion rotation = Quaternion.LookRotation(transform.position - position, Vector3.up);
-        _playerCamera = Instantiate(_playerCameraPrefab, position, rotation).GetComponent<IPlayerCamera>();
+        PlayerManager pm = FindObjectOfType<PlayerManager>();
+        pm.SetControllable(this);
 
-        if (_playerCamera == null)
-            throw new System.Exception($"PlayerCameraPrefab doesnt have component PlayerCamera");
-
-        _playerCamera.Init(transform, transform);
     }
 
     private void SubscribeToEvents()
     {
-        MoveHelper moveHelper = new MoveHelper(GetMove);
+        if (GetPlayerInputSystem == null) return;
 
-        GetPlayerInputSystem.SubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Move, moveHelper.Move);
 
-        GetPlayerInputSystem.SubscribeMeOnCameraTurnEvent(moveHelper.Turn);
+        //GetPlayerInputSystem.SubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Move, GetMoveHelper.Move);
+        GetPlayerInputSystem.SubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Move, GetMove.Move);
+
+        //GetPlayerInputSystem.SubscribeMeOnCameraTurnEvent(GetMoveHelper.Turn);
+        GetPlayerInputSystem.SubscribeMeOnCameraTurnEvent(GetMove.Turn);
 
         GetPlayerInputSystem.SubscribeUnityEventsNoParam(PlayerInputSystem.EventsNoParamEnum.AttackUp, GetAttackQueueAction.AttackUp);
         GetPlayerInputSystem.SubscribeUnityEventsNoParam(PlayerInputSystem.EventsNoParamEnum.AttackDn, GetAttackQueueAction.AttackDn);
@@ -146,11 +167,13 @@ public class PlayerController : NetworkBehaviour
 
     private void UnsubscribeFromEvents()
     {
-        MoveHelper moveHelper = new MoveHelper(GetMove);
+        if (GetPlayerInputSystem == null) return;
 
-        GetPlayerInputSystem.UnsubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Move, moveHelper.Move);
+        //GetPlayerInputSystem.UnsubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Move, GetMoveHelper.Move);
+        GetPlayerInputSystem.UnsubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Move, GetMove.Move);
 
-        GetPlayerInputSystem.UnsubscribeMeFromCameraTurnEvent(moveHelper.Turn);
+        //GetPlayerInputSystem.UnsubscribeMeFromCameraTurnEvent(GetMoveHelper.Turn);
+        GetPlayerInputSystem.UnsubscribeMeFromCameraTurnEvent(GetMove.Turn);
 
         GetPlayerInputSystem.UnsubscribeUnityEventsNoParam(PlayerInputSystem.EventsNoParamEnum.AttackUp, GetAttackQueueAction.AttackUp);
         GetPlayerInputSystem.UnsubscribeUnityEventsNoParam(PlayerInputSystem.EventsNoParamEnum.AttackDn, GetAttackQueueAction.AttackDn);
@@ -174,5 +197,14 @@ public class PlayerController : NetworkBehaviour
     {
         if (_playerCamera != null)
             _playerCamera.Destroy();
+    }
+
+    public void Init(PlayerInputSystem input, IPlayerCamera camera)
+    {
+        Debug.Log($"{this} Init");
+        _playerInputSystem = input;
+        _playerCamera = camera;
+
+        SubscribeToEvents();
     }
 }
