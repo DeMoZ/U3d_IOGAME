@@ -137,9 +137,9 @@ public class PlayerController : NetworkBehaviour, IControllable
 
     //    _playerCamera.Init(transform, transform);
     //}
-    private void Awake()
+    private void Start()
     {
-        if (!isLocalPlayer) return;
+        if (!hasAuthority) return;
 
         PlayerManager pm = FindObjectOfType<PlayerManager>();
         pm.SetControllable(this);

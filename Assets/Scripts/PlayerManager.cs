@@ -49,8 +49,8 @@ public class PlayerManager : MonoBehaviour
 
         _controllable = controllable;
 
-        _playerInputSystem.UnsubscribeAll();
+        GetPlayerInputSystem.UnsubscribeAll();
 
-        _controllable.Init(_playerInputSystem, GetPlayerCamera);
+        _controllable.Init(GetPlayerInputSystem, GetPlayerCamera);
     }
 }
