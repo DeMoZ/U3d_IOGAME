@@ -12,33 +12,32 @@ namespace TheCamera
     [RequireComponent(typeof(CinemachineFreeLook))]
     public class PlayerCamera : MonoBehaviour, IPlayerCamera
     {
-        //[Tooltip("Camera rotation speed")]
-        //[SerializeField] Vector2 _speed = new Vector2(1, 0.01f);
-
         [Tooltip("Recalculate rigs heights if checked")]
         [SerializeField] bool _calculateRigsHeight = false;
 
-        [Header("Depricated")]
-        [Tooltip("Dumpling of following offset. w - for YAW (y rotation)")]
-        [SerializeField] UnityEngine.Vector3 _followingOffset = new UnityEngine.Vector3(0, 3.54f, -4);
+        [Tooltip("Recalculate rigs radius if checked")]
+        [SerializeField] bool _calculateRigsRadius = false;
 
-        [Tooltip("Dumpling of following offset. w - for YAW (y rotation)")]
-        [SerializeField] UnityEngine.Vector4 _followingOffsetDumpling = new UnityEngine.Vector4(1, 5, 3, 0);
-
-
+        [Tooltip("Recalculate target follow offset height if checked")]
+        [SerializeField] bool _calculateFollowHeight = false;
+        
         private Transform _transform;
         public Transform GetTransform => _transform;
 
         private CinemachineFreeLook _cmCamera;
         public CinemachineFreeLook GetCmCamera => _cmCamera;
 
-        //  private CinemachineOrbitalTransposer _transposer;
-        //  private CinemachineComposer _composer;
+        private CinemachineComposer _topComposer;
+        private CinemachineComposer _middleComposer;
+        private CinemachineComposer _bottomComposer;
 
         private void Awake()
         {
             _transform = transform;
             _cmCamera = GetComponent<CinemachineFreeLook>();
+            _topComposer = _cmCamera.GetRig(0).GetCinemachineComponent<CinemachineComposer>();
+            _middleComposer = _cmCamera.GetRig(1).GetCinemachineComponent<CinemachineComposer>();
+            _bottomComposer = _cmCamera.GetRig(2).GetCinemachineComponent<CinemachineComposer>();
         }
 
         public void Init(Transform follow, Transform lookAt)
@@ -57,30 +56,23 @@ namespace TheCamera
                 GetCmCamera.m_Orbits[0].m_Height = heigh + 0.2f;
                 GetCmCamera.m_Orbits[1].m_Height = heigh / 2;
                 GetCmCamera.m_Orbits[2].m_Height = heigh / 6;
+            }
+
+            // TODO: need formula to calculate Rigs radius
+            if (_calculateRigsRadius) { 
                 // GetCmCamera.m_Orbits[0].m_Radius=
                 // GetCmCamera.m_Orbits[1].m_Radius =
                 // GetCmCamera.m_Orbits[2].m_Radius =
-
-                //GetCmCamera.GetRig(0).m_
             }
 
+            if (_calculateFollowHeight)
+            {
+                Vector3 followOffset = new Vector3(0, heigh, 0);
 
-            //GetCmCamera.GetRig()
-            // cashing
-            // _transposer = GetCmCamera.GetCinemachineComponent<CinemachineOrbitalTransposer>();
-            //  _composer = GetCmCamera.GetCinemachineComponent<CinemachineComposer>();
-
-            // setting offsets
-            //_transposer.m_FollowOffset = _followingOffset;
-
-            //_transposer.m_XDamping = _followingOffsetDumpling.x;
-            //_transposer.m_YDamping = _followingOffsetDumpling.y;
-            //_transposer.m_ZDamping = _followingOffsetDumpling.z;
-            //_transposer.m_YawDamping = _followingOffsetDumpling.w;
-
-            //_composer.m_TrackedObjectOffset = new UnityEngine.Vector3(_composer.m_TrackedObjectOffset.x,
-            //                                                heigh,
-            //                                                _composer.m_TrackedObjectOffset.z);
+                _topComposer.m_TrackedObjectOffset = followOffset;
+                _middleComposer.m_TrackedObjectOffset = followOffset;
+                _bottomComposer.m_TrackedObjectOffset = followOffset;
+            }           
         }
 
         private float GetHeigh(Transform other)

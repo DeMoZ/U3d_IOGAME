@@ -12147,11 +12147,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1653233567628583961, guid: a39a0082439cee347869a12cb2a3002e,
         type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.3598717
-      objectReference: {fileID: 0}
-    - target: {fileID: 1653233567628583961, guid: a39a0082439cee347869a12cb2a3002e,
-        type: 3}
       propertyPath: m_LocalRotation.y
       value: 0.07935112
       objectReference: {fileID: 0}
@@ -12159,16 +12154,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0.030735483
-      objectReference: {fileID: 0}
-    - target: {fileID: 1653233567628583961, guid: a39a0082439cee347869a12cb2a3002e,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.9291131
-      objectReference: {fileID: 0}
-    - target: {fileID: 1653233567879771737, guid: a39a0082439cee347869a12cb2a3002e,
-        type: 3}
-      propertyPath: m_TrackedObjectOffset.y
-      value: 1.05
       objectReference: {fileID: 0}
     - target: {fileID: 1653233568669494290, guid: a39a0082439cee347869a12cb2a3002e,
         type: 3}
@@ -12185,11 +12170,6 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 799982665}
-    - target: {fileID: 1653233568669494291, guid: a39a0082439cee347869a12cb2a3002e,
-        type: 3}
-      propertyPath: m_XAxis.m_MaxSpeed
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 1653233568669494292, guid: a39a0082439cee347869a12cb2a3002e,
         type: 3}
       propertyPath: m_LocalPosition.x
