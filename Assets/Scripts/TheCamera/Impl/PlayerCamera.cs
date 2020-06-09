@@ -20,7 +20,7 @@ namespace TheCamera
 
         [Tooltip("Recalculate target follow offset height if checked")]
         [SerializeField] bool _calculateFollowHeight = false;
-        
+
         private Transform _transform;
         public Transform GetTransform => _transform;
 
@@ -53,26 +53,25 @@ namespace TheCamera
             if (_calculateRigsHeight)
             {
                 // Heights and radiused of rings
-                GetCmCamera.m_Orbits[0].m_Height = heigh + 0.2f;
+                GetCmCamera.m_Orbits[0].m_Height = heigh * 2f;
                 GetCmCamera.m_Orbits[1].m_Height = heigh / 2;
                 GetCmCamera.m_Orbits[2].m_Height = heigh / 6;
             }
 
             // TODO: need formula to calculate Rigs radius
-            if (_calculateRigsRadius) { 
-                // GetCmCamera.m_Orbits[0].m_Radius=
-                // GetCmCamera.m_Orbits[1].m_Radius =
-                // GetCmCamera.m_Orbits[2].m_Radius =
+            if (_calculateRigsRadius)
+            {
+                GetCmCamera.m_Orbits[0].m_Radius = heigh / 2;
+                GetCmCamera.m_Orbits[1].m_Radius = heigh * 2;
+                GetCmCamera.m_Orbits[2].m_Radius = heigh / 2;
             }
 
             if (_calculateFollowHeight)
             {
-                Vector3 followOffset = new Vector3(0, heigh, 0);
-
-                _topComposer.m_TrackedObjectOffset = followOffset;
-                _middleComposer.m_TrackedObjectOffset = followOffset;
-                _bottomComposer.m_TrackedObjectOffset = followOffset;
-            }           
+                _topComposer.m_TrackedObjectOffset =new Vector3(_topComposer.m_TrackedObjectOffset.x, heigh, _topComposer.m_TrackedObjectOffset .z);
+                _middleComposer.m_TrackedObjectOffset = new Vector3(_middleComposer.m_TrackedObjectOffset.x, heigh, _middleComposer.m_TrackedObjectOffset.z);
+                _bottomComposer.m_TrackedObjectOffset = new Vector3(_bottomComposer.m_TrackedObjectOffset.x, heigh, _bottomComposer.m_TrackedObjectOffset.z);
+            }
         }
 
         private float GetHeigh(Transform other)
