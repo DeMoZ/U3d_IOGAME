@@ -7,7 +7,7 @@ using UnityEngine;
 /// Contains list of spawn spots on the scene.
 /// Currently does nothing for game logic
 /// </summary>
-public class SpawnSpotManager : NetworkBehaviour
+public class SpawnSpotManager : MonoBehaviour
 {
     private List<SpawnSpot> _spawnPoints = new List<SpawnSpot>();
 

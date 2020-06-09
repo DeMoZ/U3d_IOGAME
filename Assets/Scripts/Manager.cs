@@ -19,7 +19,7 @@ public class Manager : MonoBehaviour
     {
         _spawnSpotManager = GetComponentInChildren<SpawnSpotManager>();
 
-        if (_spawnSpotManager)
+        if (_spawnSpotManager != null)
             _spawnSpotManager.Initialize();
         else
             throw new System.Exception($"There are no SpawnSpostManager among childs of {name}");

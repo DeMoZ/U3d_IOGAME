@@ -1,7 +1,4 @@
-﻿using Mirror.Examples.Basic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿//#define INSTANTIATE_CAMERA
 using TheCamera;
 using UnityEngine;
 
@@ -11,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
+#if INSTANTIATE_CAMERA
     [SerializeField] GameObject _playerCameraPrefab;
 
     IPlayerCamera _playerCamera;
@@ -27,6 +25,29 @@ public class PlayerManager : MonoBehaviour
             return _playerCamera;
         }
     }
+#else
+    [SerializeField] GameObject _playerCameraGO;
+
+    IPlayerCamera _playerCamera;
+    IPlayerCamera GetPlayerCamera
+    {
+        get
+        {
+            if (!_playerCameraGO)
+                throw new System.Exception($"Player camera game object not linked in {this}");
+
+            if (_playerCamera == null)
+            {
+                _playerCamera = _playerCameraGO.GetComponent<IPlayerCamera>();
+
+                if (_playerCamera == null)
+                    throw new System.Exception($"Linked camera for {this} doesn't have IPlayerCamera component");
+            }
+
+            return _playerCamera;
+        }
+    }
+#endif
 
     PlayerInputSystem _playerInputSystem;
 
@@ -52,5 +73,7 @@ public class PlayerManager : MonoBehaviour
         GetPlayerInputSystem.UnsubscribeAll();
 
         _controllable.Init(GetPlayerInputSystem, GetPlayerCamera);
+
+        GetPlayerCamera.Init(controllable.GetTransform, controllable.GetTransform);
     }
 }

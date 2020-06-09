@@ -60,6 +60,8 @@ namespace TheCamera
                 // GetCmCamera.m_Orbits[0].m_Radius=
                 // GetCmCamera.m_Orbits[1].m_Radius =
                 // GetCmCamera.m_Orbits[2].m_Radius =
+
+                //GetCmCamera.GetRig(0).m_
             }
 
 

@@ -1,5 +1,4 @@
-﻿//#define INSTALL_CAMERA
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TheAttack;
@@ -17,41 +16,30 @@ using Mirror;
 [RequireComponent(typeof(IMove))]
 public class PlayerController : NetworkBehaviour, IControllable
 {
-    //#if INSTALL_CAMERA
-    //    [SerializeField] GameObject _playerCameraPrefab;
-    //#endif
+    private Transform _transform;
+    public Transform GetTransform
+    {
+        get
+        {
+            if (!_transform)
+                _transform = transform;
+
+            return transform;
+        }
+    }
+
     IPlayerCamera _playerCamera;
     private IPlayerCamera GetPlayerCamera => _playerCamera;
-    //{
-    //    get
-    //    {
-    //        if (_playerCamera == null)
-    //        {
-    //            InitCamera();
-    //            GetPlayerInputSystem.Init(GetPlayerCamera);
-    //        }
-    //        return _playerCamera;
-    //    }
-    //}
-
+   
     private PlayerInputSystem _playerInputSystem;
     private PlayerInputSystem GetPlayerInputSystem => _playerInputSystem;
-    //{
-    //    get
-    //    {
-    //        if (!_playerInputSystem)
-    //            _playerInputSystem = GetComponent<PlayerInputSystem>();
-
-    //        return _playerInputSystem;
-    //    }
-    //}
-
+   
     private AttackQueueAction _attackQueueAction;
     private AttackQueueAction GetAttackQueueAction
     {
         get
         {
-            if (!_attackQueueAction)
+            if (_attackQueueAction==null)
                 _attackQueueAction = GetComponent<AttackQueueAction>();
 
             return _attackQueueAction;
@@ -70,6 +58,7 @@ public class PlayerController : NetworkBehaviour, IControllable
         }
     }
 
+    /*
     MoveHelper _moveHelper;
     MoveHelper GetMoveHelper
     {
@@ -120,30 +109,13 @@ public class PlayerController : NetworkBehaviour, IControllable
             _iCamera.Rotate(vector);
         }
     }
-
-
-    //private void InitCamera()
-    //{
-    //    if (!_playerCameraPrefab)
-    //        throw new System.Exception($"_ Camera prefab not set for {this}");
-
-    //    // instantiate player camera
-    //    Vector3 position = Vector3.zero;
-    //    Quaternion rotation = Quaternion.LookRotation(transform.position - position, Vector3.up);
-    //    _playerCamera = Instantiate(_playerCameraPrefab, position, rotation).GetComponent<IPlayerCamera>();
-
-    //    if (_playerCamera == null)
-    //        throw new System.Exception($"PlayerCameraPrefab doesnt have component PlayerCamera");
-
-    //    _playerCamera.Init(transform, transform);
-    //}
+    */
     private void Start()
     {
         if (!hasAuthority) return;
 
         PlayerManager pm = FindObjectOfType<PlayerManager>();
         pm.SetControllable(this);
-
     }
 
     private void SubscribeToEvents()
@@ -192,13 +164,7 @@ public class PlayerController : NetworkBehaviour, IControllable
     {
         UnsubscribeFromEvents();
     }
-
-    private void OnDestroy()
-    {
-        if (_playerCamera != null)
-            _playerCamera.Destroy();
-    }
-
+    
     public void Init(PlayerInputSystem input, IPlayerCamera camera)
     {
         Debug.Log($"{this} Init");
@@ -207,4 +173,5 @@ public class PlayerController : NetworkBehaviour, IControllable
 
         SubscribeToEvents();
     }
+
 }
