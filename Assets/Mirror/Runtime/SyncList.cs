@@ -35,15 +35,6 @@ namespace Mirror
         protected override bool DeserializeItem(NetworkReader reader) => reader.ReadBoolean();
     }
 
-    // Original UNET name is SyncListStruct and original Weaver weavers anything
-    // that contains the name 'SyncListStruct', without considering the namespace.
-    // Deprecated 03/20/2019
-    [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use SyncList<MyStruct> instead")]
-    public class SyncListSTRUCT<T> : SyncList<T> where T : struct
-    {
-        public T GetItem(int i) => base[i];
-    }
-
     [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class SyncList<T> : IList<T>, IReadOnlyList<T>, SyncObject
     {
@@ -61,14 +52,8 @@ namespace Mirror
             OP_ADD,
             OP_CLEAR,
             OP_INSERT,
-            // Deprecated 10/21/2019
-            [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Lists now pass OP_REMOVEAT")]
-            OP_REMOVE,
             OP_REMOVEAT,
-            OP_SET,
-            // Deprecated 12/03/2019
-            [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Lists now use OP_SET instead of OP_DIRTY")]
-            OP_DIRTY
+            OP_SET
         }
 
         struct Change
@@ -105,6 +90,14 @@ namespace Mirror
         // throw away all the changes
         // this should be called after a successfull sync
         public void Flush() => changes.Clear();
+
+        public void Reset()
+        {
+            IsReadOnly = false;
+            changes.Clear();
+            changesAhead = 0;
+            objects.Clear();
+        }
 
         void AddOperation(Operation op, int itemIndex, T oldItem, T newItem)
         {
@@ -305,6 +298,21 @@ namespace Mirror
                 if (match(objects[i]))
                     return i;
             return -1;
+        }
+
+        public T Find(Predicate<T> match)
+        {
+            int i = FindIndex(match);
+            return (i != -1) ? objects[i] : default;
+        }
+
+        public List<T> FindAll(Predicate<T> match)
+        {
+            List<T> results = new List<T>();
+            for (int i = 0; i < objects.Count; ++i)
+                if (match(objects[i]))
+                    results.Add(objects[i]);
+            return results;
         }
 
         public void Insert(int index, T item)
