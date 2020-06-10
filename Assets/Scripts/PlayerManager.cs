@@ -1,8 +1,10 @@
 ﻿//#define INSTANTIATE_CAMERA
-using TheCamera;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerInputSystem))]
+using TheCamera;
+using TheInput;
+using TheControllable;
+//[RequireComponent(typeof(IInputSystem))]
 /// <summary>
 /// on Player assigment, sets all the dependendies on it
 /// </summary>
@@ -49,16 +51,19 @@ public class PlayerManager : MonoBehaviour
     }
 #endif
 
-    PlayerInputSystem _playerInputSystem;
+    IInputSystem _inputSystem;
 
-    PlayerInputSystem GetPlayerInputSystem
+    IInputSystem GetInputSystem
     {
         get
         {
-            if (_playerInputSystem == null)
-                _playerInputSystem = GetComponent<PlayerInputSystem>();
+            if (_inputSystem == null)
+            {
+                _inputSystem = GetComponent<IInputSystem>();
+                Debug.Log($"1 GetInputSystem= {_inputSystem != null} ");
 
-            return _playerInputSystem;
+            }
+            return _inputSystem;
         }
     }
 
@@ -70,12 +75,14 @@ public class PlayerManager : MonoBehaviour
 
         _controllable = controllable;
 
-        GetPlayerInputSystem.UnsubscribeAll();
+        Debug.Log($"2 GetInputSystem= {GetInputSystem!=null} ");
 
-        GetPlayerInputSystem.SubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Look, GetPlayerCamera.Rotate);
-
-        _controllable.Init(GetPlayerInputSystem, GetPlayerCamera);
+        GetInputSystem.UnsubscribeAll();
+        
+        _controllable.Init(GetInputSystem, GetPlayerCamera);
 
         GetPlayerCamera.Init(controllable.GetTransform, controllable.GetTransform);
+
+        GetInputSystem.SubscribeVector2Event(InputGlobals.EventsV2Enum.Look, GetPlayerCamera.Rotate);
     }
 }
