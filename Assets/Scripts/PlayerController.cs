@@ -134,7 +134,7 @@ public class PlayerController : NetworkBehaviour, IControllable
         GetPlayerInputSystem.SubscribeUnityEventsNoParam(PlayerInputSystem.EventsNoParamEnum.AttackLt, GetAttackQueueAction.AttackLt);
         GetPlayerInputSystem.SubscribeUnityEventsNoParam(PlayerInputSystem.EventsNoParamEnum.AttackRt, GetAttackQueueAction.AttackRt);
 
-        GetPlayerInputSystem.SubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Look, GetPlayerCamera.Rotate);
+       // GetPlayerInputSystem.SubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Look, GetPlayerCamera.Rotate);
     }
 
     private void UnsubscribeFromEvents()
@@ -152,7 +152,7 @@ public class PlayerController : NetworkBehaviour, IControllable
         GetPlayerInputSystem.UnsubscribeUnityEventsNoParam(PlayerInputSystem.EventsNoParamEnum.AttackLt, GetAttackQueueAction.AttackLt);
         GetPlayerInputSystem.UnsubscribeUnityEventsNoParam(PlayerInputSystem.EventsNoParamEnum.AttackRt, GetAttackQueueAction.AttackRt);
 
-        GetPlayerInputSystem.UnsubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Look, GetPlayerCamera.Rotate);
+       // GetPlayerInputSystem.UnsubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Look, GetPlayerCamera.Rotate);
     }
 
     private void OnEnable()

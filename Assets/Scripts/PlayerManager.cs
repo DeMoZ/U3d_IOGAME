@@ -72,6 +72,8 @@ public class PlayerManager : MonoBehaviour
 
         GetPlayerInputSystem.UnsubscribeAll();
 
+        GetPlayerInputSystem.SubscribeVector2Event(PlayerInputSystem.EventsV2Enum.Look, GetPlayerCamera.Rotate);
+
         _controllable.Init(GetPlayerInputSystem, GetPlayerCamera);
 
         GetPlayerCamera.Init(controllable.GetTransform, controllable.GetTransform);
