@@ -68,10 +68,22 @@ namespace TheCamera
 
             if (_calculateFollowHeight)
             {
-                _topComposer.m_TrackedObjectOffset =new Vector3(_topComposer.m_TrackedObjectOffset.x, heigh, _topComposer.m_TrackedObjectOffset .z);
+                _topComposer.m_TrackedObjectOffset = new Vector3(_topComposer.m_TrackedObjectOffset.x, heigh, _topComposer.m_TrackedObjectOffset.z);
                 _middleComposer.m_TrackedObjectOffset = new Vector3(_middleComposer.m_TrackedObjectOffset.x, heigh, _middleComposer.m_TrackedObjectOffset.z);
                 _bottomComposer.m_TrackedObjectOffset = new Vector3(_bottomComposer.m_TrackedObjectOffset.x, heigh, _bottomComposer.m_TrackedObjectOffset.z);
             }
+
+            // set camera at the back of character
+            float angle = Vector3.SignedAngle(GetTransform.forward, follow.forward, Vector3.up);
+            // GetCmCamera.m_XAxis.Value -= angle;
+            Debug.Log($"angle = {angle}, \n cam forw = {GetTransform.forward}, obj forw = {follow.forward}");
+
+        }
+
+        public Vector3 CamForward;
+        private void Update()
+        {
+            CamForward = GetTransform.forward;
         }
 
         private float GetHeigh(Transform other)
@@ -110,8 +122,13 @@ namespace TheCamera
 
         public void Rotate(Vector2 vector)
         {
-            GetCmCamera.m_YAxis.Value += vector.y * Time.deltaTime;// * _speed.y;
-            GetCmCamera.m_XAxis.Value += vector.x * Time.deltaTime;// * _speed.x;
+            // rotate around Y axis
+            //GetCmCamera.m_XAxis.Value += vector.x * Time.deltaTime;// * _speed.x;
+            GetCmCamera.m_XAxis.m_InputAxisValue = vector.x * Time.deltaTime;
+
+            // rotate around X axis
+            //GetCmCamera.m_YAxis.Value += vector.y * Time.deltaTime;// * _speed.y;
+            GetCmCamera.m_YAxis.m_InputAxisValue = vector.y * Time.deltaTime;
         }
     }
 }
