@@ -12255,6 +12255,16 @@ PrefabInstance:
       propertyPath: m_XAxis.m_InvertInput
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1653233568669494291, guid: a39a0082439cee347869a12cb2a3002e,
+        type: 3}
+      propertyPath: m_YAxis.m_MaxSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1653233568669494291, guid: a39a0082439cee347869a12cb2a3002e,
+        type: 3}
+      propertyPath: m_Heading.m_Definition
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1653233568669494292, guid: a39a0082439cee347869a12cb2a3002e,
         type: 3}
       propertyPath: m_LocalPosition.x

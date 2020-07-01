@@ -31,6 +31,8 @@ namespace TheCamera
         private CinemachineComposer _middleComposer;
         private CinemachineComposer _bottomComposer;
 
+        public Vector3 CameraSignedAngle { get; private set; }
+
         private void Awake()
         {
             _transform = transform;
@@ -73,17 +75,19 @@ namespace TheCamera
                 _bottomComposer.m_TrackedObjectOffset = new Vector3(_bottomComposer.m_TrackedObjectOffset.x, heigh, _bottomComposer.m_TrackedObjectOffset.z);
             }
 
-            // set camera at the back of character
-            float angle = Vector3.SignedAngle(GetTransform.forward, follow.forward, Vector3.up);
+            // set camera at the back of character ---!!! it happans itself
+            //float angle = Vector3.SignedAngle(GetTransform.forward, follow.forward, Vector3.up);
             // GetCmCamera.m_XAxis.Value -= angle;
-            Debug.Log($"angle = {angle}, \n cam forw = {GetTransform.forward}, obj forw = {follow.forward}");
+            //Debug.Log($"angle = {angle}, \n cam forw = {GetTransform.forward}, obj forw = {follow.forward}");
 
         }
 
-        public Vector3 CamForward;
+        public float anbleCharacterCamera;
         private void Update()
         {
-            CamForward = GetTransform.forward;
+            CameraSignedAngle = new Vector3(GetCmCamera.m_YAxis.Value, GetCmCamera.m_XAxis.Value, 0);
+
+            anbleCharacterCamera = Vector3.SignedAngle(GetCmCamera.Follow.forward, CameraSignedAngle,Vector3.up);
         }
 
         private float GetHeigh(Transform other)
