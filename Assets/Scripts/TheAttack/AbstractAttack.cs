@@ -10,7 +10,6 @@ namespace TheAttack
         /// Class should receive events from animations with string names and parce it
         /// </summary>
         /// <param name="attackStates"></param>
-        /// 
         public virtual void Attack(string attackStates)
         {
             string[] parsed = attackStates.Split(':');
