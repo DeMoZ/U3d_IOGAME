@@ -27,11 +27,17 @@ namespace TheCamera
         private CinemachineFreeLook _cmCamera;
         public CinemachineFreeLook GetCmCamera => _cmCamera;
 
+        private Vector3 _cameraForward = Vector3.zero;
+        public Vector3 GetCameraForward => _cameraForward;
+
+        private float _cameraAngleToFollow = 0;
+        public float GetCameraAngleToFollow => _cameraAngleToFollow;
+
         private CinemachineComposer _topComposer;
         private CinemachineComposer _middleComposer;
         private CinemachineComposer _bottomComposer;
 
-        public Vector3 CameraSignedAngle { get; private set; }
+       
 
         private void Awake()
         {
@@ -46,8 +52,8 @@ namespace TheCamera
         {
             Debug.Log($"Camera Created, follow {follow} ; lookAt {lookAt}");
 
-            GetCmCamera.Follow = follow;
-            GetCmCamera.LookAt = lookAt;
+            _cmCamera.Follow = follow;
+            _cmCamera.LookAt = lookAt;
 
             // set rigs
             float heigh = GetHeigh(lookAt);
@@ -55,17 +61,17 @@ namespace TheCamera
             if (_calculateRigsHeight)
             {
                 // Heights and radiused of rings
-                GetCmCamera.m_Orbits[0].m_Height = heigh * 2f;
-                GetCmCamera.m_Orbits[1].m_Height = heigh / 2;
-                GetCmCamera.m_Orbits[2].m_Height = heigh / 6;
+                _cmCamera.m_Orbits[0].m_Height = heigh * 2f;
+                _cmCamera.m_Orbits[1].m_Height = heigh / 2;
+                _cmCamera.m_Orbits[2].m_Height = heigh / 6;
             }
 
             // TODO: need formula to calculate Rigs radius
             if (_calculateRigsRadius)
             {
-                GetCmCamera.m_Orbits[0].m_Radius = heigh / 2;
-                GetCmCamera.m_Orbits[1].m_Radius = heigh * 2;
-                GetCmCamera.m_Orbits[2].m_Radius = heigh / 2;
+                _cmCamera.m_Orbits[0].m_Radius = heigh / 2;
+                _cmCamera.m_Orbits[1].m_Radius = heigh * 2;
+                _cmCamera.m_Orbits[2].m_Radius = heigh / 2;
             }
 
             if (_calculateFollowHeight)
@@ -82,12 +88,14 @@ namespace TheCamera
 
         }
 
-        public float anbleCharacterCamera;
         private void Update()
         {
-            CameraSignedAngle = new Vector3(GetCmCamera.m_YAxis.Value, GetCmCamera.m_XAxis.Value, 0);
+            // setting the camera Y rotation to _cameraForward, then making direction from it
+            _cameraForward.y = GetCmCamera.m_XAxis.Value;            
+            _cameraForward = Quaternion.Euler(_cameraForward) * Vector3.forward; // вот это форвард
 
-            anbleCharacterCamera = Vector3.SignedAngle(GetCmCamera.Follow.forward, CameraSignedAngle,Vector3.up);
+            // angle between camera and follow
+            _cameraAngleToFollow = Vector3.SignedAngle(_cameraForward, GetCmCamera.Follow.forward, Vector3.up);
         }
 
         private float GetHeigh(Transform other)
@@ -127,11 +135,9 @@ namespace TheCamera
         public void Rotate(Vector2 vector)
         {
             // rotate around Y axis
-            //GetCmCamera.m_XAxis.Value += vector.x * Time.deltaTime;// * _speed.x;
             GetCmCamera.m_XAxis.m_InputAxisValue = vector.x * Time.deltaTime;
 
             // rotate around X axis
-            //GetCmCamera.m_YAxis.Value += vector.y * Time.deltaTime;// * _speed.y;
             GetCmCamera.m_YAxis.m_InputAxisValue = vector.y * Time.deltaTime;
         }
     }
