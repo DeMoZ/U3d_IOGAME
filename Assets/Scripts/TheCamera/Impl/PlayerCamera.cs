@@ -37,8 +37,6 @@ namespace TheCamera
         private CinemachineComposer _middleComposer;
         private CinemachineComposer _bottomComposer;
 
-       
-
         private void Awake()
         {
             _transform = transform;
@@ -50,8 +48,6 @@ namespace TheCamera
 
         public void Init(Transform follow, Transform lookAt)
         {
-            Debug.Log($"Camera Created, follow {follow} ; lookAt {lookAt}");
-
             _cmCamera.Follow = follow;
             _cmCamera.LookAt = lookAt;
 
@@ -90,12 +86,17 @@ namespace TheCamera
 
         private void Update()
         {
-            // setting the camera Y rotation to _cameraForward, then making direction from it
-            _cameraForward.y = GetCmCamera.m_XAxis.Value;            
-            _cameraForward = Quaternion.Euler(_cameraForward) * Vector3.forward; // вот это форвард
+            if (GetCmCamera.Follow)
+            {
+                // setting the camera Y rotation to _cameraForward, then making direction from it
+                _cameraForward.y = GetCmCamera.m_XAxis.Value;
+                _cameraForward = Quaternion.Euler(_cameraForward) * Vector3.forward; // вот это форвард
 
-            // angle between camera and follow
-            _cameraAngleToFollow = Vector3.SignedAngle(_cameraForward, GetCmCamera.Follow.forward, Vector3.up);
+                // angle between camera and follow
+                _cameraAngleToFollow = Vector3.SignedAngle(_cameraForward, GetCmCamera.Follow.forward, Vector3.up);
+            }
+            else
+                _cameraAngleToFollow = 0;
         }
 
         private float GetHeigh(Transform other)

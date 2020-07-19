@@ -68,7 +68,11 @@ namespace TheInput
         /// </summary>
         public void Init(IPlayerCamera playerCamera)
         {
+
+            Debug.Log($"Camera initialized on {this}");
             _playerCamera = playerCamera;
+
+
         }
 
 
@@ -278,6 +282,7 @@ namespace TheInput
 
         private void OnEnable()
         {
+            Debug.Log($"OnEnagle on {this}");
             _inputActions.Enable();
         }
 

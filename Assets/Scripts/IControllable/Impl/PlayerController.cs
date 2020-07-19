@@ -11,7 +11,7 @@ using TheInput;
 namespace TheControllable
 {
     /// <summary>
-    /// General script that manages communication between classes, generates camera.
+    /// General script that manages communication between classes 
     /// </summary>
     [DisallowMultipleComponent]
 
@@ -60,7 +60,12 @@ namespace TheControllable
                 return _iMove;
             }
         }
-       
+
+        private void Awake()
+        {
+            
+        }
+
         private void Start()
         {
             if (!hasAuthority) return;
